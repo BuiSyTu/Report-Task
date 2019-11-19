@@ -4,7 +4,7 @@ var router = express.Router();
 var pg = require("pg")
 
 var config = {
-  connectionString: 'postgres://xbziegmhxcxlas:7ce98c2cd9c14199200b76e62e9f8592d717f3e7a1c210f2a85947118130a41c@ec2-174-129-240-67.compute-1.amazonaws.com:5432/d3pkij1joc4ck0'
+  connectionString: 'postgres://witidczijjtnft:220ebe4c41a4e78db9b30207eaee20d0422f92038f958614a09ef9f2f030dbd6@ec2-174-129-231-100.compute-1.amazonaws.com:5432/d4h5vs51ghpb1q'
 }
 
 var pool = new pg.Pool(config)
