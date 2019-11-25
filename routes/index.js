@@ -17,8 +17,8 @@ router.get('/', function (req, res, next) {
 
 router.post('/', (req, res, next) => {
   let params = req.body;
-  // params.created_time = moment().format('DD/MM/YYYY, hh:mm:ss');
-  // params.updated_time = moment().format('DD/MM/YYYY, hh:mm:ss');
+  params.created_time = new Date();
+  params.updated_time = new Date();
   let report_elements = Object.keys(params).map(key => {
     return params[key]
   })
@@ -44,12 +44,13 @@ router.get('/:id', function (req, res, next) {
 
 router.put('/:id', (req, res, next) => {
   let id = parseInt(req.params.id)
-  let params = req.body
+  let params = req.body;
+  params.updated_time = new Date();
   let report_elements = Object.keys(params).map(key => {
     return params[key]
   })
 
-  report_elements.push(id)
+  report_elements.push(id);
   let data = reportTask.updateReportTask(report_elements)
 
   data.then(result => {
