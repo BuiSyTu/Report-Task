@@ -1,14 +1,15 @@
 const q = require("q")
 const { Pool, Client } = require('pg')
-// const config = {
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'Fruits',
-//     password: 'tu199712',
-//     port: 5432
-// }
+const config = {
+    user: 'postgres',
+    host: 'localhost',
+    database: 'Fruits',
+    password: 'tu199712',
+    port: 5432
+}
 
-var config = "postgres://witidczijjtnft:220ebe4c41a4e78db9b30207eaee20d0422f92038f958614a09ef9f2f030dbd6@ec2-174-129-231-100.compute-1.amazonaws.com:5432/d4h5vs51ghpb1q"
+// var config = "postgres://witidczijjtnft:220ebe4c41a4e78db9b30207eaee20d0422f92038f958614a09ef9f2f030dbd6@ec2-174-129-231-100.compute-1.amazonaws.com:5432/d4h5vs51ghpb1q"
+
 const pool = new Pool(config)
 const client = new Client(config)
 client.connect()
@@ -74,10 +75,26 @@ function addReportTask(report) {
     return defer.promise
 }
 
+//project
+getReportByTypeId = (id, type) => {
+    let defer = q.defer();
+    let sql = `SELECT * from report.report_task WHERE ${type} = ${id}`;
+    client.query(sql, (err, res) => {
+        if (err) { defer.reject(err); }
+        else {
+            defer.resolve(res);
+        }
+    })
+    return defer.promise;
+}
+
+
+
 module.exports = {
     getReportTask,
     addReportTask,
     getReportTaskById,
     updateReportTask,
-    deleteReportTask
+    deleteReportTask,
+    getReportByTypeId
 }
