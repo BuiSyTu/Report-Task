@@ -20,7 +20,7 @@ function getReportTask() {
 
 function getReportTaskById(id) {
     let defer = q.defer()
-    client.query('SELECT * FROM report.report_task WHERE id = $1', [id], (err, res) => {
+    client.query('SELECT * FROM report.report_task WHERE id = $1',[id], (err, res) => {
         if (err) {
             defer.reject(err)
         } else {
@@ -32,8 +32,8 @@ function getReportTaskById(id) {
 
 const updateReportTask = (report) => {
     let defer = q.defer()
-    // let sql = `UPDATE report.report_task SET name = SET name = ${report.name}, user_id = ${report.user_id}, content = ${report.content}, status = ${report.status}, project_id = ${report.project_id}, department_id = ${report.department_id}, task_id = ${report.task_id}, updated_time = ${report.updated_time}, WHERE id = ${report.id}`
-    client.query("UPDATE report.report_task SET name = $1, user_id = $2, content = $3, status = $4, project_id = $5, department_id = $6 , task_id = $7, updated_time = $8 WHERE id = $9", report,  (err, res) => {
+    // let sql = `UPDATE report.report_task SET name = ${report.name}, user_id = ${report.user_id}, content = ${report.content}, status = ${report.status}, project_id = ${report.project_id}, department_id = ${report.department_id}, task_id = ${report.task_id}, updated_time = ${report.updated_time}, WHERE id = ${report.id}`
+    client.query("UPDATE report.report_task SET name = $1, user_id = $2, content = $3, status = $4, project_id = $5, department_id = $6 , task_id = $7, updated_time = $8 WHERE id = $9", report, (err, res) => {
         if (err) {
             defer.reject(err)
         } else {

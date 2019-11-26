@@ -11,7 +11,7 @@ router.get('/', function (req, res, next) {
   data.then(report => {
     res.json(report.rows)
   }).catch(() => {
-    res.json({ "2": "1" })
+    res.json({ "status_code": "500" })
   })
 })
 
@@ -22,7 +22,6 @@ router.post('/', (req, res, next) => {
   let report_elements = Object.keys(params).map(key => {
     return params[key]
   })
-  console.log(report_elements);
 
   let data = reportTask.addReportTask(report_elements)
   data.then(result => {
@@ -38,7 +37,7 @@ router.get('/:id', function (req, res, next) {
   data.then(report => {
     res.json(report.rows)
   }).catch(() => {
-    res.json({ "2": "1" })
+    res.json({ "status_code": "500" })
   })
 })
 
