@@ -33,7 +33,7 @@ function getReportTaskById(id) {
 const updateReportTask = (report) => {
     let defer = q.defer()
     // let sql = `UPDATE report.report_task SET name = SET name = ${report.name}, user_id = ${report.user_id}, content = ${report.content}, status = ${report.status}, project_id = ${report.project_id}, department_id = ${report.department_id}, task_id = ${report.task_id}, updated_time = ${report.updated_time}, WHERE id = ${report.id}`
-    client.query("UPDATE report.report_task SET name = $1, user_id = $2, content = $3, status = $4, project_id = $5, department_id = $6 , task_id = $7, updated_time = $8 WHERE id = $9", report,  (err, res) => {
+    client.query("UPDATE report.report_task SET name = $1, user_id = $2, content = $3, status = $4, project_id = $5, department_id = $6 , task_id = $7, updated_time = $8 WHERE id = $9", report, (err, res) => {
         if (err) {
             defer.reject(err)
         } else {
@@ -59,9 +59,13 @@ function deleteReportTask(id) {
 function addReportTask(report) {
     let defer = q.defer()
     // let sql = "INSERT INTO report.report_task VALUES ($1, $2, $3, $4, $5, $6,$7, $8, $9)"
-    client.query("INSERT INTO report.report_task VALUES ($1, $2, $3, $4, $5, $6,$7, $8, $9, $10)", report, (err, res) => {
+    let query = client.query("INSERT INTO report.report_task VALUES ($1, $2, $3, $4, $5, $6,$7, $8, $9, $10)", report, (err, res) => {
         if (err) defer.reject(err)
-        else defer.resolve(res)
+        else {
+            console.log(client);
+
+            defer.resolve(res);
+        }
     })
     return defer.promise
 }
@@ -80,6 +84,41 @@ const getReportByTypeId = (id, type) => {
 }
 
 
+const addLogSerice = log => {
+
+    let defer = q.defer();
+    let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
+    // console.log(sql);
+
+    client.query(sql, (err, res) => {
+        if (err) {
+            defer.reject(err);
+        } else {
+            defer.resolve(res);
+        }
+
+    })
+    return defer.promise;
+
+}
+
+const getLogService = async () => {
+    // let defer = q.defer();
+    let sql = 'SELECT * FROM report.log_service';
+    try {
+        const { rows } = await client.query(sql);
+        if (!rows[0]) {
+            return { 'message': 'log service not found' };
+        }
+        return rows;
+    } catch (error) {
+        console.log(error);
+
+    }
+    // return defer.promise;
+}
+
+
 
 module.exports = {
     getReportTask,
@@ -87,5 +126,7 @@ module.exports = {
     getReportTaskById,
     updateReportTask,
     deleteReportTask,
-    getReportByTypeId
+    getReportByTypeId,
+    addLogSerice,
+    getLogService
 }
