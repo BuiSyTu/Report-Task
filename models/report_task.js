@@ -59,9 +59,13 @@ function deleteReportTask(id) {
 function addReportTask(report) {
     let defer = q.defer()
     // let sql = "INSERT INTO report.report_task VALUES ($1, $2, $3, $4, $5, $6,$7, $8, $9)"
-    client.query("INSERT INTO report.report_task VALUES ($1, $2, $3, $4, $5, $6,$7, $8, $9, $10)", report, (err, res) => {
+    let query = client.query("INSERT INTO report.report_task VALUES ($1, $2, $3, $4, $5, $6,$7, $8, $9, $10)", report, (err, res) => {
         if (err) defer.reject(err)
-        else defer.resolve(res)
+        else {
+            console.log(client);
+
+            defer.resolve(res);
+        }
     })
     return defer.promise
 }
@@ -80,6 +84,41 @@ const getReportByTypeId = (id, type) => {
 }
 
 
+const addLogSerice = log => {
+
+    let defer = q.defer();
+    let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
+    // console.log(sql);
+
+    client.query(sql, (err, res) => {
+        if (err) {
+            defer.reject(err);
+        } else {
+            defer.resolve(res);
+        }
+
+    })
+    return defer.promise;
+
+}
+
+const getLogService = async () => {
+    // let defer = q.defer();
+    let sql = 'SELECT * FROM report.log_service';
+    try {
+        const { rows } = await client.query(sql);
+        if (!rows[0]) {
+            return { 'message': 'log service not found' };
+        }
+        return rows;
+    } catch (error) {
+        console.log(error);
+
+    }
+    // return defer.promise;
+}
+
+
 
 module.exports = {
     getReportTask,
@@ -87,5 +126,7 @@ module.exports = {
     getReportTaskById,
     updateReportTask,
     deleteReportTask,
-    getReportByTypeId
+    getReportByTypeId,
+    addLogSerice,
+    getLogService
 }
