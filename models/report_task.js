@@ -59,7 +59,6 @@ function deleteReportTask(id) {
 }
 
 function addReportTask(report) {
-    console.log(report);
     let defer = q.defer()
     let sql = `INSERT INTO report.report_task(name, user_id, content, status, created_time, project_id, department_id, task_id, updated_time) VALUES ('${report.name}', '${report.user_id}', '${report.content}','${report.status}',' ${report.created_time.toISOString()}', '${report.project_id}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
     let query = client.query(sql, (err, res) => {
@@ -87,7 +86,6 @@ const getReportByTypeId = (id, type) => {
 const addLogSerice = log => {
     let defer = q.defer();
     let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
-    console.log(sql);
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err);
