@@ -6,16 +6,16 @@ const generateLog = req => {
         path: req.url,
         payload: req.body,
         created_at: new Date()
-    };
+    }
     reportTask.addLogSerice(log).then(result => {
-        res.statusCode = 200;
-        return true;
-        // console.log("success");
+      console.log('result')
+        res.statusCode = 200
+        return true
       }).catch(err => {
-        res.statusCode = 500;
-        return false;
+        res.statusCode = 500
+        return false
       })
-    return true;
+    return true
 }
 
 module.exports = {
