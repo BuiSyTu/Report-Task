@@ -22,7 +22,7 @@ function getAllReportTask() {
 
 function getReportTaskById(id) {
     let defer = q.defer()
-    let sql = `SELECT * FROM report.report_task WHERE id = ${id}`
+    let sql = `SELECT * FROM report.report_task WHERE id = '${id}'`
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err)
@@ -35,7 +35,7 @@ function getReportTaskById(id) {
 
 const updateReportTask = (report) => {
     let defer = q.defer()
-    let sql = `UPDATE report.report_task SET name = '${report.name}', user_id = '${report.user_id}', content = '${report.content}', status = '${report.status}', department_id = '${report.department_id}', task_id = '${report.task_id}', updated_time = '${report.updated_time.toISOString()}' WHERE id = '${report.id}'`
+    let sql = `UPDATE report.report_task SET name = '${report.name}', user_id = '${report.user_id}', content = '${report.content}', department_id = '${report.department_id}', task_id = '${report.task_id}', updated_time = '${report.updated_time.toISOString()}' WHERE id = '${report.id}'`
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err)
@@ -49,7 +49,9 @@ const updateReportTask = (report) => {
 
 function deleteReportTask(id) {
     let defer = q.defer()
-    let sql = `DELETE FROM report.report_task WHERE id = ${id}`
+    let sql = `DELETE FROM report.report_task WHERE id = '${id}'`
+    console.log(sql);
+    
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err)
@@ -62,7 +64,7 @@ function deleteReportTask(id) {
 
 function addReportTask(report) {
     let defer = q.defer()
-    let sql = `INSERT INTO report.report_task(id, name, user_id, content, status, created_time, department_id, task_id, updated_time) VALUES ('${report.id}','${report.name}', '${report.user_id}', '${report.content}','${report.status}',' ${report.created_time.toISOString()}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
+    let sql = `INSERT INTO report.report_task(id, name, user_id, content, created_time, department_id, task_id, updated_time) VALUES ('${report.id}','${report.name}', '${report.user_id}', '${report.content}',' ${report.created_time.toISOString()}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
     console.log(sql);
     
     let query = client.query(sql, (err, res) => {
@@ -76,7 +78,7 @@ function addReportTask(report) {
 
 const getReportByTypeId = (id, type) => {
     let defer = q.defer();
-    let sql = `SELECT * from report.report_task WHERE ${type} = ${id}`;
+    let sql = `SELECT * from report.report_task WHERE ${type} = '${id}'`;
     client.query(sql, (err, res) => {
         if (err) { defer.reject(err); }
         else {

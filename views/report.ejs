@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"></script>
+<style>
+    .add {
+        margin: 5px 15px;
+    }
+
+    #search{
+        margin: 10px 20px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+                <h2>Tạo báo cáo</h2> 
+        </div>
+        <div class="col-2"><input id="search" type="text" placeholder="Nhập tên trường"  required></div>
+        <div class="col-2 center"><button type="button" onclick="add()" class="btn btn-primary add">Thêm trường</button></div>
+            
+    </div>
+
+  <form id="form" class="form" action="/create_report/<%= id%>" method="POST">
+    <input type="text" value="<%= id%>" name="task_id" hidden>
+    <div class="form-group">
+        <label class="control-label">
+            Người thực hiện:
+        </label>
+        <input class="form-control" name="doer" value="<%= doer.name %>" readonly>
+    </div>
+    <div class="form-group">
+            <label class="control-label">
+                Người cùng thực hiện
+            </label>
+            <input class="form-control" name ="co_doer" value="<% for(var i = 0; i < coDoers.length; i++) {%>  <%=coDoers[i].name%> , <%}%>" readonly>
+    </div>
+    <div class="form-group">
+            <label class="control-label">
+                Người đánh giá
+            </label>
+            <input class="form-control" name ="reviewer" value="<%=reviewer.name%>" readonly>
+    </div>
+    <div class="form-group">
+            <label class="control-label">
+                Người tạo
+            </label>
+            <input class="form-control" name ="creator" value="<%=creator.name%>" readonly>
+    </div>
+    <div class="form-group">
+            <label class="control-label">
+                Các phòng liên quan
+            </label>
+            <input class="form-control" name ="co_department" value="<% for(var i = 0; i < coDepartments.length; i++) {%>  <%=coDepartments[i].name, %> , <%}%>"  readonly>
+    </div>
+    <div class="form-group">
+            <label class="control-label">
+                Thời gian bắt đầu
+            </label>
+            <input class="form-control" name ="start" value="<%= start%>" readonly>
+    </div>
+    <div class="form-group">
+            <label class="control-label">
+                Thời gian kết thúc
+            </label>
+            <input class="form-control" name ="finish" value="<% if (finish) {%> <%= finish%> <%}%>"  readonly>
+    </div>
+    <div class="form-group">
+            <label class="control-label">
+                Trạng thái công việc
+            </label>
+            <input class="form-control" name ="status" value="<%= status%>" readonly>
+    </div>
+    <div class="form-group">
+            <label class="control-label">
+                Loại báo cáo
+            </label>
+            <input class="form-control" name ="type"  value="<%= type%>" readonly>
+    </div>
+    <div class="form-group" id ="submit">        
+        <button type="submit" class="btn btn-success">Tạo báo cáo</button>
+    </div>
+  </form>
+</div>
+
+<script>
+    function remove(id) {
+        closer = document.getElementById(id);
+        console.log(closer.parentElement.parentElement);        
+        closer.parentElement.parentElement.remove();
+        console.log("xoa")
+    }
+
+    function add() {
+        closer = document.getElementsByClassName("close");
+        search = document.getElementById("search");
+        
+        
+        
+        form = document.getElementById("form");
+        submit = document.getElementById("submit")
+        submit.remove(); 
+        
+        var div = document.createElement('div');
+        div.className = 'form-group';
+
+
+        var label = document.createElement('label');
+        label.className = 'control-label';
+        label.innerHTML = search.value
+
+        var button = document.createElement("button");
+        button.className = "close"
+        button.id = closer.length;
+
+        var span = document.createElement("span");
+        span.className = "text-danger";
+        span.innerHTML = "&times;"
+        button.appendChild(span)
+
+        label.appendChild(button)
+
+        var input = document.createElement('input');
+        input.className = 'form-control'
+        input.name = search.value
+
+        div.appendChild(label);
+        div.append(input)
+        form.appendChild(div);
+
+        // button = document.getElementById(closer.length);
+        // button.setAttribute('onclick', remove())
+        form.appendChild(submit);
+    }
+</script>
+
+</body>
+</html>
+
+
