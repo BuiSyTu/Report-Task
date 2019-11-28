@@ -7,12 +7,58 @@ const { generateLog } = require('../helper/generate_log')
 const uuid = require('uuid/v1');
 const axios = require('axios');
 
-router.get('/test', (req, res, next) => {
-  axios.get('https://falling-frog-38743.pktriot.net/api/hello/')
+
+router.get('/create_report/:id', (req, res, next) => {
+  generateLog(req)
+  id = req.params.id
+  link = `https://falling-frog-38743.pktriot.net/api/recurrent-tasks/${id}`  
+  axios.get(link)
   .then(respond => {
-    console.log(respond.data.message)
+    if (!respond.data.finish) {
+      respond.data.finish = 'Không xác định'   
+    }
+    if (respond.data.coDepartments.length == 0) {
+      respond.data.coDepartments = [{name: 'Không xác định'}]
+    }
+    respond.data.id = id
+    res.render('report.ejs', respond.data)
   })
-  res.json({"status": 1})
+})
+
+router.post('/create_report/:id/', (req, res, next) => {
+  generateLog(req)
+  let params = req.body
+  console.log(params);
+
+  params.created_time = new Date()
+  params.updated_time = new Date()
+  params.id = uuid()
+  params.user_id = uuid()
+  params.department_id = uuid()
+  params.name = "Bao cao so 1"
+
+  params.content = JSON.stringify({
+    doer: params.doer,
+    co_doer: params.co_doer,
+    reviewer: params.reviewer,
+    creator: params.creator,
+    co_department: params.co_department,
+    start: params.start,
+    finish: params.finish,
+    status: params.status
+  })
+
+  params.status = 1
+  
+  console.log(params);
+  
+
+  reportTask.addReportTask(params)
+    .then(result => {
+      res.json({ "status_code": 200 })
+    }).catch(() => {
+      res.json({ "status_code": 500 })
+    })
 })
 
 
@@ -67,10 +113,10 @@ router.get('/:id', function (req, res, next) {
     })
 })
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id/', (req, res, next) => {
   generateLog(req)
-  let id = parseInt(req.params.id)
   let params = req.body
+  let id = req.params.id
   params.updated_time = new Date()
   params.id = id
 
@@ -80,7 +126,6 @@ router.put('/:id', (req, res, next) => {
     }).catch(() => {
       res.json({ "status_code": 500 })
     })
-
 })
 
 router.delete('/:id', (req, res, next) => {
