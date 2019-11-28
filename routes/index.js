@@ -130,7 +130,7 @@ router.put('/:id/', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
   generateLog(req)
-  let id = parseInt(req.params.id)
+  let id = req.params.id
 
   reportTask.deleteReportTask(id)
     .then(result => {
@@ -142,7 +142,7 @@ router.delete('/:id', (req, res, next) => {
 
 router.get('/projects/:id', (req, res, next) => {
   generateLog(req)
-  let id = parseInt(req.params.id)
+  let id = req.params.id
 
   reportTask.getReportByTypeId(id, "project_id")
     .then(result => {
@@ -154,7 +154,7 @@ router.get('/projects/:id', (req, res, next) => {
 
 router.get('/departments/:id', (req, res, next) => {
   generateLog(req)
-  let id = parseInt(req.params.id)
+  let id = req.params.id
 
   reportTask.getReportByTypeId(id, "department_id")
     .then(result => {
@@ -166,7 +166,7 @@ router.get('/departments/:id', (req, res, next) => {
 
 router.get('/tasks/:id', (req, res, next) => {
   generateLog(req)
-  let id = parseInt(req.params.id)
+  let id = req.params.id
 
   reportTask.getReportByTypeId(id, "task_id")
     .then(result => {
