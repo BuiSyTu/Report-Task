@@ -5,6 +5,8 @@ const pool = new Pool(config)
 const client = new Client(config)
 client.connect()
 
+const uuid = require('uuid/v1');
+
 function getAllReportTask() {
     let defer = q.defer()
     let query = client.query('SELECT * FROM report.report_task', (err, res) => {
@@ -33,7 +35,7 @@ function getReportTaskById(id) {
 
 const updateReportTask = (report) => {
     let defer = q.defer()
-    let sql = `UPDATE report.report_task SET name = '${report.name}', user_id = '${report.user_id}', content = '${report.content}', status = '${report.status}', project_id = '${report.project_id}', department_id = '${report.department_id}', task_id = '${report.task_id}', updated_time = '${report.updated_time.toISOString()}' WHERE id = '${report.id}'`
+    let sql = `UPDATE report.report_task SET name = '${report.name}', user_id = '${report.user_id}', content = '${report.content}', status = '${report.status}', department_id = '${report.department_id}', task_id = '${report.task_id}', updated_time = '${report.updated_time.toISOString()}' WHERE id = '${report.id}'`
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err)
@@ -60,7 +62,9 @@ function deleteReportTask(id) {
 
 function addReportTask(report) {
     let defer = q.defer()
-    let sql = `INSERT INTO report.report_task(name, user_id, content, status, created_time, project_id, department_id, task_id, updated_time) VALUES ('${report.name}', '${report.user_id}', '${report.content}','${report.status}',' ${report.created_time.toISOString()}', '${report.project_id}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
+    let sql = `INSERT INTO report.report_task(id, name, user_id, content, status, created_time, department_id, task_id, updated_time) VALUES ('${report.id}','${report.name}', '${report.user_id}', '${report.content}','${report.status}',' ${report.created_time.toISOString()}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
+    console.log(sql);
+    
     let query = client.query(sql, (err, res) => {
         if (err) defer.reject(err)
         else {
@@ -85,7 +89,10 @@ const getReportByTypeId = (id, type) => {
 
 const addLogSerice = log => {
     let defer = q.defer();
-    let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
+    // let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
+    let sql = `INSERT INTO report.log(id, method, path, payload, created_time) VALUES ('${uuid()}','${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
+    console.log(sql);
+
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err);
@@ -98,7 +105,7 @@ const addLogSerice = log => {
 }
 
 const getLogService = async () => {
-    let sql = 'SELECT * FROM report.log_service';
+    let sql = 'SELECT * FROM report.log';
     try {
         const { rows } = await client.query(sql);
         if (!rows[0]) {

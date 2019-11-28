@@ -6,6 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -16,6 +17,8 @@
     "morgan": "~1.9.1",
     "nodemon": "^2.0.1",
     "pg": "^7.12.1",
-    "q": "^1.5.1"
+    "q": "^1.5.1",
+    "swagger-ui-express": "^4.1.2",
+    "uuid": "^3.3.3"
   }
 }

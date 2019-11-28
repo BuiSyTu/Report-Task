@@ -4,6 +4,16 @@ var reportTask = require('../models/report_task')
 require("body-parser")
 var moment = require('moment')
 const { generateLog } = require('../helper/generate_log')
+const uuid = require('uuid/v1');
+const axios = require('axios');
+
+router.get('/test', (req, res, next) => {
+  axios.get('https://falling-frog-38743.pktriot.net/api/hello/')
+  .then(respond => {
+    console.log(respond.data.message)
+  })
+  res.json({"status": 1})
+})
 
 
 router.get('/logs', (req, res, next) => {
@@ -33,6 +43,9 @@ router.post('/', (req, res, next) => {
   let params = req.body
   params.created_time = new Date()
   params.updated_time = new Date()
+  params.id = uuid()
+  console.log(params.id);
+  
 
   reportTask.addReportTask(params)
     .then(result => {
