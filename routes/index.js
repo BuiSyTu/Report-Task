@@ -90,6 +90,7 @@ router.post('/', (req, res, next) => {
   params.created_time = new Date()
   params.updated_time = new Date()
   params.id = uuid()
+  params.content = JSON.stringify(params.content)
   console.log(params.id);
   
 
@@ -119,6 +120,7 @@ router.put('/:id/', (req, res, next) => {
   let id = req.params.id
   params.updated_time = new Date()
   params.id = id
+  params.content = JSON.stringify(params.content)
 
   reportTask.updateReportTask(params)
     .then(result => {
