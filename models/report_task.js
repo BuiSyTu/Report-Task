@@ -51,7 +51,7 @@ function deleteReportTask(id) {
     let defer = q.defer()
     let sql = `DELETE FROM report.report_task WHERE id = '${id}'`
     console.log(sql);
-    
+
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err)
@@ -66,7 +66,7 @@ function addReportTask(report) {
     let defer = q.defer()
     let sql = `INSERT INTO report.report_task(id, name, user_id, content, created_time, department_id, task_id, updated_time) VALUES ('${report.id}','${report.name}', '${report.user_id}', '${report.content}',' ${report.created_time.toISOString()}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
     console.log(sql);
-    
+
     let query = client.query(sql, (err, res) => {
         if (err) defer.reject(err)
         else {
@@ -92,7 +92,7 @@ const getReportByTypeId = (id, type) => {
 const addLogSerice = log => {
     let defer = q.defer();
     // let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
-    let sql = `INSERT INTO report.log(id, method, path, payload, created_time) VALUES ('${uuid()}','${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
+    let sql = `INSERT INTO report.log(id, method, path, created_time) VALUES ('${uuid()}','${log.method}', '${log.path}', '${log.created_at.toISOString()}')`;
     console.log(sql);
 
     client.query(sql, (err, res) => {
@@ -106,8 +106,15 @@ const addLogSerice = log => {
 
 }
 
-const getLogService = async () => {
-    let sql = 'SELECT * FROM report.log';
+const getLogService = async (query) => {
+    let { start, end } = query;
+    let sql;
+    if (query == null) {
+        sql = `SELECT * FROM report.log`;
+    } else {
+
+        sql = `SELECT * FROM report.log WHERE created_time >= ${start} AND created_time <= ${end}`;
+    }
     try {
         const { rows } = await client.query(sql);
         if (!rows[0]) {

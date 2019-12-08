@@ -26,7 +26,6 @@ router.get('/create_report/:id', (req, res, next) => {
 })
 
 router.post('/create_report/:id/', (req, res, next) => {
-  generateLog(req)
   let params = req.body
   console.log(params);
 
@@ -55,15 +54,20 @@ router.post('/create_report/:id/', (req, res, next) => {
 
   reportTask.addReportTask(params)
     .then(result => {
-      res.json({ "status_code": 200 })
+      status = 200
+      generateLog(req, status)
+      res.json({ "status_code": status })
     }).catch(() => {
-      res.json({ "status_code": 500 })
+      status = 500
+      generateLog(req, status)
+      res.json({ "status_code": status })
     })
 })
 
 
 router.get('/logs', (req, res, next) => {
-  reportTask.getLogService()
+  console.log(req.query);
+  reportTask.getLogService(req.query)
     .then(result => {
       for (i = 0; i < result.length; i++) {
         result[i].payload = JSON.parse(result[i].payload)
@@ -91,7 +95,6 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/', (req, res, next) => {
-  generateLog(req)
   let params = req.body
   params.created_time = new Date()
   params.updated_time = new Date()
@@ -101,14 +104,17 @@ router.post('/', (req, res, next) => {
 
   reportTask.addReportTask(params)
     .then(result => {
+      status = 200
+      generateLog(req, status)
       res.json({ "status_code": 200 })
     }).catch(() => {
+      status = 500
+      generateLog(req, status)
       res.json({ "status_code": 500 })
     })
 })
 
 router.get('/:id', function (req, res, next) {
-  generateLog(req)
   let id = req.params.id
 
   reportTask.getReportTaskById(id)
@@ -121,7 +127,6 @@ router.get('/:id', function (req, res, next) {
 })
 
 router.put('/:id/', (req, res, next) => {
-  generateLog(req)
   let params = req.body
   let id = req.params.id
   params.updated_time = new Date()
@@ -129,20 +134,27 @@ router.put('/:id/', (req, res, next) => {
 
   reportTask.updateReportTask(params)
     .then(result => {
+      status = 200
+      generateLog(req, status)
       res.json({ "status_code": 200 })
     }).catch(() => {
+      status = 500
+      generateLog(req, status)
       res.json({ "status_code": 500 })
     })
 })
 
 router.delete('/:id', (req, res, next) => {
-  generateLog(req)
   let id = req.params.id
 
   reportTask.deleteReportTask(id)
     .then(result => {
+      status = 200
+      generateLog(req, status)
       res.json({ "status_code": 200 })
     }).catch(() => {
+      status = 500
+      generateLog(req, status)
       res.json({ "status_code": 500 })
     })
 })
