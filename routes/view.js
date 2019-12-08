@@ -12,4 +12,9 @@ router.get('/login', (req, res, next) => {
     res.render("login");
 })
 
+
+router.post('/login', [], (req, res)=>{
+    let {username, password} = req.body;
+    
+})
 module.exports = router;

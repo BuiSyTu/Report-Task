@@ -70,14 +70,29 @@ router.post('/create_report/:id/', (req, res, next) => {
 
 
 router.get('/logs', (req, res, next) => {
-  console.log(req.query);
+  // console.log(req.query);
   reportTask.getLogService(req.query)
     .then(result => {
-      res.json(result)
+      let rs2 = result.map(item => {
+        return {
+          id: item.id,
+          actionUserId: item.actionuserid,
+          type: item.type,
+          reportId: item.reportid,
+          status: item.status,
+          createdTime: item.createdtime,
+          service: item.service
+        }
+      })
+      res.json(rs2);
+      // console.log(tesst);
+      
     }).catch(err => {
       res.json({ "status_code": "500" })
     })
 })
+
+
 
 
 

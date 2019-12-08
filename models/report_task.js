@@ -114,10 +114,12 @@ const getLogService = async (query) => {
     if (start == null && end == null) {
         sql = `SELECT * FROM report.log`;
     } else {
-        sql = `SELECT * FROM report.log WHERE createdTime >= ${start} AND createdTime <= ${end}`;
+        sql = `SELECT * FROM report.log WHERE createdTime >= '${start}' AND createdTime <= '${end}'`;
     }
     try {
         const { rows } = await client.query(sql);
+        console.log(sql);
+        
         if (!rows[0]) {
             return { 'message': 'log service not found' };
         }
