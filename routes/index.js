@@ -6,7 +6,7 @@ var moment = require('moment')
 const { generateLog } = require('../helper/generate_log')
 const uuid = require('uuid/v1');
 const axios = require('axios');
-
+var checkRole = require('../helper/checkRole');
 
 router.get('/create_report/:id', (req, res, next) => {
   generateLog(req)
@@ -86,7 +86,7 @@ router.get('/logs', (req, res, next) => {
       })
       res.json(rs2);
       // console.log(tesst);
-      
+
     }).catch(err => {
       res.json({ "status_code": "500" })
     })
@@ -97,7 +97,7 @@ router.get('/logs', (req, res, next) => {
 
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', [checkRole.hasUserId], function (req, res, next) {
   generateLog(req)
 
   reportTask.getAllReportTask()
