@@ -8,6 +8,21 @@ const uuid = require('uuid/v1');
 const axios = require('axios');
 const env = require('../helper/environment');
 var checkRole = require('../helper/checkRole');
+
+
+
+router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
+    let { id } = req.params;
+
+    reportTask.getReportTaskById(id)
+    .then(report => {
+      res.json(report.rows)
+    }).catch(() => {
+      res.json('fail r em oi')
+    })
+});
+
+
 router.get('/login', (req, res, next) => {
     console.log('req.session.validUrl: ', req.session.validUrl);
     res.render("login", { message: req.session.validUrl });
@@ -41,10 +56,13 @@ router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     let link = env.baseUrl;
 
     axios.get(link + '/admin/report-list').then(result => {
+        console.log(result.data);
+
+        res.render("reportList", { report: result.data });
 
     });
-    res.render("reportList");
 });
+
 
 
 module.exports = router;

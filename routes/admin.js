@@ -24,4 +24,15 @@ router.get('/report-list', (req, res, next) => {
         })
 })
 
+router.get('/report/:id', function (req, res, next) {
+    let id = req.params.id
+  
+    reportTask.getReportTaskById(id)
+      .then(report => {
+        res.json(JSON.stringify(report.rows[0]));
+      }).catch(() => {
+        res.json({ "status_code": "500" })
+      })
+  })
+
 module.exports = router;
