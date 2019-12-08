@@ -69,14 +69,12 @@ router.get('/logs', (req, res, next) => {
   console.log(req.query);
   reportTask.getLogService(req.query)
     .then(result => {
-      for (i = 0; i < result.length; i++) {
-        result[i].payload = JSON.parse(result[i].payload)
-      }
       res.json(result)
     }).catch(err => {
       res.json({ "status_code": "500" })
     })
 })
+
 
 
 /* GET home page. */
