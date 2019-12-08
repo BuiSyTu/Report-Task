@@ -89,31 +89,30 @@ const getReportByTypeId = (id, type) => {
 }
 
 
-const addLogSerice = log => {
-    let defer = q.defer();
-    // let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
-    let sql = `INSERT INTO report.log(id, method, path, created_time) VALUES ('${uuid()}','${log.method}', '${log.path}', '${log.created_at.toISOString()}')`;
-    console.log(sql);
+// const addLogSerice = log => {
+//     let defer = q.defer();
+//     // let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
+//     let sql = `INSERT INTO report.log(id, method, path, created_time) VALUES ('${uuid()}','${log.method}', '${log.path}', '${log.created_at.toISOString()}')`;
+//     console.log(sql);
 
-    client.query(sql, (err, res) => {
-        if (err) {
-            defer.reject(err);
-        } else {
-            defer.resolve(res);
-        }
-    })
-    return defer.promise;
+//     client.query(sql, (err, res) => {
+//         if (err) {
+//             defer.reject(err);
+//         } else {
+//             defer.resolve(res);
+//         }
+//     })
+//     return defer.promise;
 
-}
+// }
 
 const getLogService = async (query) => {
     let { start, end } = query;
     let sql;
-    if (query == null) {
+    if (query.start == null || query.end == null) {
         sql = `SELECT * FROM report.log`;
     } else {
-
-        sql = `SELECT * FROM report.log WHERE created_time >= ${start} AND created_time <= ${end}`;
+        sql = `SELECT * FROM report.log WHERE createdTime >= ${start} AND createdTime <= ${end}`;
     }
     try {
         const { rows } = await client.query(sql);
@@ -136,6 +135,6 @@ module.exports = {
     updateReportTask,
     deleteReportTask,
     getReportByTypeId,
-    addLogSerice,
+    // addLogSerice,
     getLogService
 }

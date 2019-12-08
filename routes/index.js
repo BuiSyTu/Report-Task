@@ -20,6 +20,10 @@ router.get('/create_report/:id', (req, res, next) => {
       if (respond.data.coDepartments.length == 0) {
         respond.data.coDepartments = [{ name: 'Không xác định' }]
       }
+      if (!respond.data.doer) {
+        respond.data.doer = "Không xác định"
+      }
+      if (!respond.data.coDoers) respond.data.doer = [{ name: 'Không xác định' }]
       respond.data.id = id
       res.render('report.ejs', respond.data)
     })
@@ -69,9 +73,9 @@ router.get('/logs', (req, res, next) => {
   console.log(req.query);
   reportTask.getLogService(req.query)
     .then(result => {
-      for (i = 0; i < result.length; i++) {
-        result[i].payload = JSON.parse(result[i].payload)
-      }
+      // for (i = 0; i < result.length; i++) {
+      //   result[i].payload = JSON.parse(result[i].payload)
+      // }
       res.json(result)
     }).catch(err => {
       res.json({ "status_code": "500" })
