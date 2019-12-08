@@ -1,11 +1,11 @@
 // db tu
-// const config = {
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'Fruits',
-//     password: 'tu199712',
-//     port: 5432
-// }
+const config = {
+    user: 'postgres',
+    host: 'localhost',
+    database: 'Fruits',
+    password: 'tu199712',
+    port: 5432
+}
 
 // const config = {
 //     user: 'postgres',
@@ -20,13 +20,13 @@
 
 
 // db quang
-const config = {
-    user: 'postgres',
-    host: 'localhost',
-    database: 'report',
-    password: '123456',
-    port: 5432
-}
+// const config = {
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'report',
+//     password: '123456',
+//     port: 5432
+// }
 
 
 module.exports = {
