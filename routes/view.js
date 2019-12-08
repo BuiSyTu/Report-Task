@@ -9,7 +9,8 @@ const axios = require('axios');
 const env = require('../helper/environment');
 var checkRole = require('../helper/checkRole');
 router.get('/login', (req, res, next) => {
-    res.render("login");
+    console.log('req.session.validUrl: ', req.session.validUrl);
+    res.render("login", { message: req.session.validUrl });
 })
 
 
@@ -24,23 +25,26 @@ router.post('/login', [], (req, res) => {
             password: password
         }
     }).then(result => {
-        
+
         req.session.infoUser = result.data;
-        console.log(req.session);
-        res.json(result.data);
+
+        res.redirect(req.session.validUrl);
+
     }).catch(err => {
+
         console.log(err);
 
     });
 })
 
-router.get('/report-list',[checkRole.hasUserId], (req, res, next) => {
+router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     let link = env.baseUrl;
 
-    axios.get(link).then(result=>{
-        console.log(result.data);
-        
+    axios.get(link + '/admin/report-list').then(result => {
+
     });
     res.render("reportList");
 });
+
+
 module.exports = router;

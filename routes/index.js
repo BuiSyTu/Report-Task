@@ -30,9 +30,8 @@ router.get('/create_report/:id', (req, res, next) => {
 })
 
 router.post('/create_report/:id/', (req, res, next) => {
-  let params = req.body
-  console.log(params);
-
+  let params = req.body;
+  
   params.created_time = new Date()
   params.updated_time = new Date()
   params.id = uuid()
@@ -53,7 +52,7 @@ router.post('/create_report/:id/', (req, res, next) => {
 
   params.status = 1
 
-  console.log(params);
+  
 
 
   reportTask.addReportTask(params)
@@ -70,7 +69,7 @@ router.post('/create_report/:id/', (req, res, next) => {
 
 
 router.get('/logs', (req, res, next) => {
-  // console.log(req.query);
+  // 
   reportTask.getLogService(req.query)
     .then(result => {
       let rs2 = result.map(item => {
@@ -85,7 +84,7 @@ router.get('/logs', (req, res, next) => {
         }
       })
       res.json(rs2);
-      // console.log(tesst);
+      // 
 
     }).catch(err => {
       res.json({ "status_code": "500" })
@@ -116,7 +115,7 @@ router.post('/', (req, res, next) => {
   params.created_time = new Date()
   params.updated_time = new Date()
   params.id = uuid()
-  console.log(params.id);
+  
 
 
   reportTask.addReportTask(params)
