@@ -13,8 +13,22 @@ router.get('/login', (req, res, next) => {
 })
 
 
-router.post('/login', [], (req, res)=>{
-    let {username, password} = req.body;
-    
+router.post('/login', [], (req, res) => {
+    let { username, password } = req.body;
+
+    axios({
+        method: 'post',
+        url: 'https://api-ptpmpt-18.herokuapp.com/api/auth/login',
+        data: {
+            username: username,
+            password: password
+        }
+    }).then(result => {
+        console.log(result);
+        res.json(result.data);
+    }).catch(err => {
+        console.log(err);
+
+    });
 })
 module.exports = router;
