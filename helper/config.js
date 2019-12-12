@@ -4,26 +4,10 @@
 const config = {
     user: 'postgres',
     host: 'localhost',
-<<<<<<< HEAD
     database: 'Fruits',
     password: 'tu199712',
     port: 5432
 }
-=======
-    database: 'postgres',
-    password: 'tu199712',
-    port: 5432
-}
-
-// db quang
-// const config = {
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'Fruits',
-//     password: 'tu199712',
-//     port: 5432
-// }
->>>>>>> db2cfa8cdfa6d206355ee3ae8e5fb23dc10cb373
 
 // const config = {
 //     user: 'postgres',
