@@ -42,8 +42,7 @@ router.post('/login', [], (req, res) => {
     }).then(result => {
 
         req.session.infoUser = result.data;
-
-        res.redirect(req.session.validUrl);
+        res.redirect(req.session.validUrl || '/');
 
     }).catch(err => {
 
