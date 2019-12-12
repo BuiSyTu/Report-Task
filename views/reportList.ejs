@@ -17,21 +17,6 @@
   <div class="container">
     <h2 style="text-align: center; margin-top: 20px;">Danh sách báo cáo</h2>
     <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
-
-    <div>
-      <p>Hiển thị theo</p>
-      <div class="dropdown">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-          Dropdown button
-        </button>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Link 1</a>
-          <a class="dropdown-item" href="#">Link 2</a>
-          <a class="dropdown-item-text" href="#">Text Link</a>
-          <span class="dropdown-item-text">Just Text</span>
-        </div>
-      </div>
-    </div>
     <br>
 
     <table class="table">
@@ -39,6 +24,7 @@
         <tr style="text-align: center;">
           <th>STT</th>
           <th>Tên báo cáo</th>
+          <th>Phòng ban</th>
           <th>Thời gian tạo</th>
           <th>Hành động</th>
         </tr>
@@ -48,6 +34,7 @@
         <tr style="text-align: center;">
           <td><%= i+1 %></td>
           <td><%= report[i].name%></td>
+          <td><%= report[i].department_name%></td>
           <td><%= report[i].created_time%></td>
           <td>
             <button style="outline: none; background-color: white; border: none;">
