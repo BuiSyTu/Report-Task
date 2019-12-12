@@ -37,10 +37,15 @@
           <td><%= report[i].department_name%></td>
           <td><%= report[i].created_time%></td>
           <td>
-            <button style="outline: none; background-color: white; border: none;">
+            <button style="border: none;" type="button" class="btn btn-outline-info">
               <a href="/view/report/<%= report[i].id %>">
                 <i class="fa fa-info-circle" aria-hidden="true"></i> Xem chi tiết
               </a>
+            </button>
+            <br>
+            <button style="border: none;" class="btn btn-outline-danger delete_report"
+              report_id="<%= report[i].id%>" report_name = "<%= report[i].name %>">
+              <i class="fa fa-trash-o" style="font-size: x-large;"></i>
             </button>
           </td>
         </tr>
@@ -49,6 +54,7 @@
     </table>
     <hr>
   </div>
+  <script src="/static/js/post.js"></script>
 
 </body>
 

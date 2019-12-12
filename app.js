@@ -36,6 +36,9 @@ app.use(session({
 app.use('/', indexRouter);
 app.use('/view', viewRouter);
 app.use('/admin', adminRouter);
+
+app.use('/static', express.static(__dirname + "/public"));
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
