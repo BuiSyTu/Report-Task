@@ -24,7 +24,6 @@ router.post('/login', [], (req, res) => {
             password: password
         }
     }).then(result => {
-        
         req.session.infoUser = result.data;
         console.log(req.session);
         res.json(result.data);
@@ -34,12 +33,12 @@ router.post('/login', [], (req, res) => {
     });
 })
 
-router.get('/report-list',[checkRole.hasUserId], (req, res, next) => {
+router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     let link = env.baseUrl;
 
-    axios.get(link).then(result=>{
+    axios.get(link).then(result => {
         console.log(result.data);
-        
+
     });
     res.render("reportList");
 });
