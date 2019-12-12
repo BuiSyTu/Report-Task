@@ -30,6 +30,7 @@
         </tr>
       </thead>
       <tbody>
+        <% if(report.length != 0) {%>
         <% for(let i = 0; i < report.length; i++){%>
         <tr style="text-align: center;">
           <td><%= i+1 %></td>
@@ -43,14 +44,20 @@
               </a>
             </button>
             <br>
-            <button style="border: none;" class="btn btn-outline-danger delete_report"
-              report_id="<%= report[i].id%>" report_name = "<%= report[i].name %>">
+            <button style="border: none;" class="btn btn-outline-danger delete_report" report_id="<%= report[i].id%>"
+              report_name="<%= report[i].name %>">
               <i class="fa fa-trash-o" style="font-size: x-large;"></i>
             </button>
           </td>
         </tr>
         <% }%>
-      </tbody>
+
+        <%} else {%>
+        <tr style="text-align: center;">
+          <td colspan="5"> <p style="color: gray;">Hiện tại không có báo cáo</p></td>
+        </tr>
+        <%}%>
+    </tbody>
     </table>
     <hr>
   </div>
