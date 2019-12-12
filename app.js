@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-const viewRouter = require('./routes/view');
+var viewRouter = require('./routes/view');
+var adminRouter = require('./routes/admin');
 var app = express();
 var session = require('express-session');
 // const swaggerUi = require('swagger-ui-express');
@@ -34,6 +35,7 @@ app.use(session({
 
 app.use('/', indexRouter);
 app.use('/view', viewRouter);
+app.use('/admin', adminRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

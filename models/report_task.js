@@ -23,6 +23,8 @@ function getAllReportTask() {
 function getReportTaskById(id) {
     let defer = q.defer()
     let sql = `SELECT * FROM report.report_task WHERE id = '${id}'`
+    console.log(sql);
+    
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err)

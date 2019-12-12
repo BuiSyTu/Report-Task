@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Danh sach bao cao</title>
   <meta charset="utf-8">
@@ -8,56 +9,47 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="container">
-  <h2>Danh sach bao cao</h2>
-  <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
-  
- <div>
-    <p>Hiển thị theo</p>
-    <div class="dropdown">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-        Dropdown button
-      </button>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Link 1</a>
-        <a class="dropdown-item" href="#">Link 2</a>
-        <a class="dropdown-item-text" href="#">Text Link</a>
-        <span class="dropdown-item-text">Just Text</span>
-      </div>
-    </div>
- </div>
- <br>
-  
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div class="container">
+    <h2 style="text-align: center; margin-top: 20px;">Danh sách báo cáo</h2>
+    <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
+    <br>
+
+    <table class="table">
+      <thead>
+        <tr style="text-align: center;">
+          <th>STT</th>
+          <th>Tên báo cáo</th>
+          <th>Phòng ban</th>
+          <th>Thời gian tạo</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(let i = 0; i < report.length; i++){%>
+        <tr style="text-align: center;">
+          <td><%= i+1 %></td>
+          <td><%= report[i].name%></td>
+          <td><%= report[i].department_name%></td>
+          <td><%= report[i].created_time%></td>
+          <td>
+            <button style="outline: none; background-color: white; border: none;">
+              <a href="/view/report/<%= report[i].id %>">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> Xem chi tiết
+              </a>
+            </button>
+          </td>
+        </tr>
+        <% }%>
+      </tbody>
+    </table>
+    <hr>
+  </div>
 
 </body>
+
 </html>
