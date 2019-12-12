@@ -31,7 +31,7 @@ router.get('/create_report/:id', (req, res, next) => {
 
 router.post('/create_report/:id/', (req, res, next) => {
   let params = req.body;
-  
+
   params.created_time = new Date()
   params.updated_time = new Date()
   params.id = uuid()
@@ -69,7 +69,7 @@ router.post('/create_report/:id/', (req, res, next) => {
 
   params.status = 1
 
-  
+
 
 
   reportTask.addReportTask(params)
@@ -133,7 +133,7 @@ router.post('/', (req, res, next) => {
   params.created_time = new Date()
   params.updated_time = new Date()
   params.id = uuid()
-  
+
 
 
   reportTask.addReportTask(params)
@@ -149,15 +149,18 @@ router.post('/', (req, res, next) => {
 })
 
 router.get('/:id', function (req, res, next) {
-  let id = req.params.id
+  if (req.params.id.trim() != "favicon.ico") {
 
-  reportTask.getReportTaskById(id)
-    .then(report => {
-      // report.rows[0].content = JSON.parse(report.rows[0].content)
-      res.json(report.rows)
-    }).catch(() => {
-      res.json({ "status_code": "500" })
-    })
+    let id = req.params.id
+
+    reportTask.getReportTaskById(id)
+      .then(report => {
+        // report.rows[0].content = JSON.parse(report.rows[0].content)
+        res.json(report.rows)
+      }).catch(() => {
+        res.json({ "status_code": "500" })
+      })
+  }
 })
 
 router.put('/:id/', (req, res, next) => {
@@ -177,6 +180,7 @@ router.put('/:id/', (req, res, next) => {
       generateLog(req, status)
       res.json({ "status_code": 500 })
     })
+
 })
 
 router.delete('/:id', (req, res, next) => {
