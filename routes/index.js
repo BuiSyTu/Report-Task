@@ -39,16 +39,33 @@ router.post('/create_report/:id/', (req, res, next) => {
   params.department_id = uuid()
   params.name = "Bao cao so 1"
 
-  params.content = JSON.stringify({
-    doer: params.doer,
-    co_doer: params.co_doer,
-    reviewer: params.reviewer,
-    creator: params.creator,
-    co_department: params.co_department,
-    start: params.start,
-    finish: params.finish,
-    status: params.status
-  })
+  keyParams = Object.keys(params)  
+  
+  let obj = {};
+  for (i = 0; i < keyParams.length; i++) {
+    if (keyParams[i] != "id" && keyParams[i] != "user_id" && keyParams[i] != "department_id" && keyParams[i] != "task_id")  {
+      toang = keyParams[i].replace(/ /g, '_')
+      console.log(toang);
+      
+      obj[toang] =  params[keyParams[i]];      
+    }
+  }  
+
+  console.log(obj);
+  
+  
+
+  params.content = JSON.stringify(obj)
+  // {
+  //   doer: params.doer,
+  //   co_doer: params.co_doer,
+  //   reviewer: params.reviewer,
+  //   creator: params.creator,
+  //   co_department: params.co_department,
+  //   start: params.start,
+  //   finish: params.finish,
+  //   status: params.status
+  // }
 
   params.status = 1
 
@@ -59,7 +76,8 @@ router.post('/create_report/:id/', (req, res, next) => {
     .then(result => {
       status = 200
       generateLog(req, status)
-      res.json({ "status_code": status })
+      res.json({ "status_code": status,
+    "id": params.id })
     }).catch(() => {
       status = 500
       generateLog(req, status)
@@ -101,9 +119,9 @@ router.get('/', [checkRole.hasUserId], function (req, res, next) {
 
   reportTask.getAllReportTask()
     .then(report => {
-      for (i = 0; i < report.rows.length; i++) {
-        report.rows[i].content = JSON.parse(report.rows[i].content)
-      }
+      // for (i = 0; i < report.rows.length; i++) {
+      //   report.rows[i].content = JSON.parse(report.rows[i].content)
+      // }
       res.json(report.rows)
     }).catch(() => {
       res.json({ "status_code": "500" })
@@ -137,7 +155,7 @@ router.get('/:id', function (req, res, next) {
 
     reportTask.getReportTaskById(id)
       .then(report => {
-        report.rows[0].content = JSON.parse(report.rows[0].content)
+        // report.rows[0].content = JSON.parse(report.rows[0].content)
         res.json(report.rows)
       }).catch(() => {
         res.json({ "status_code": "500" })
@@ -150,6 +168,7 @@ router.put('/:id/', (req, res, next) => {
   let id = req.params.id
   params.updated_time = new Date()
   params.id = id
+  params.content = JSON.stringify(params.content)
 
   reportTask.updateReportTask(params)
     .then(result => {
