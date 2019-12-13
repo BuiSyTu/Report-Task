@@ -26,6 +26,8 @@ router.get('/create_report/:id', (req, res, next) => {
       if (!respond.data.coDoers) respond.data.doer = [{ name: 'Không xác định' }]
       respond.data.id = id
       res.render('report.ejs', respond.data)
+    }).catch(error => {
+      res.json({ status_code: 500 })
     })
 })
 
@@ -36,9 +38,9 @@ router.post('/create_report/:id/', (req, res, next) => {
   params.updated_time = new Date();
   params.created_time.setHours(params.created_time.getHours() + 7);
   params.updated_time.setHours(params.updated_time.getHours() + 7);
-  params.id = uuid()
-  params.user_id = uuid()
-  params.department_id = uuid()
+  params.id = uuid();
+  params.user_id = uuid();
+  params.department_id = uuid();
   params.name = "Báo cáo ngày " + moment().format('DD/MM/YYYY HH:mm:ss');
 
   keyParams = Object.keys(params)
@@ -121,7 +123,7 @@ router.post('/', (req, res, next) => {
   reportTask.addReportTask(params)
     .then(result => {
       status = 200;
-      
+
       generateLog(req, status)
       res.json({ "status_code": 200 })
     }).catch(() => {

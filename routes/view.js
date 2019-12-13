@@ -83,14 +83,8 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
     let idReport = await apiNhomHuy.getIdToCreateReport();
     let urlCreateReport = req.protocol + '://' + req.get('host') + '/create_report/'
 
-    let idReportFake = [];
     for (let i = 0; i < 10; i++) {
-        idReportFake.push(idReport[i]);
-    };
-
-    await axios.all(idReportFake.map(async id => {
-
-        // create form report
+        let id = idReport[i];
         let response = await axios.get(`${env.baseUrl_nhom3}/api/recurrent-tasks/${id}`);
         response = response.data;
         if (!response.doer) {
@@ -114,7 +108,7 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
         // post form
         try {
             await axios({
-                method: 'post',
+                method: 'POST',
                 url: urlCreateReport + id,
                 data: report,
                 headers: env.headers
@@ -126,7 +120,9 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
                 statusCode: 500
             });
         }
-    }))
+    };
+
+   
 
     return res.json({
         statusCode: 200,
