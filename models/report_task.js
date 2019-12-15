@@ -7,7 +7,8 @@ client.connect()
 
 const uuid = require('uuid/v1');
 
-function getAllReportTask() {
+
+const getAllReportTask= () => {
     let defer = q.defer()
     let query = client.query('SELECT * FROM report.report_task', (err, res) => {
         if (err) {
@@ -20,7 +21,8 @@ function getAllReportTask() {
     return defer.promise
 }
 
-function getReportTaskById(id) {
+
+const getReportTaskById = id => {
     let defer = q.defer()
     let sql = `SELECT * FROM report.report_task WHERE id = '${id}'`
     
@@ -34,6 +36,7 @@ function getReportTaskById(id) {
     })
     return defer.promise
 }
+
 
 const updateReportTask = (report) => {
     let defer = q.defer()
@@ -49,7 +52,8 @@ const updateReportTask = (report) => {
     return defer.promise
 }
 
-function deleteReportTask(id) {
+
+const deleteReportTask = id => {
     let defer = q.defer()
     let sql = `DELETE FROM report.report_task WHERE id = '${id}'`
     
@@ -64,7 +68,8 @@ function deleteReportTask(id) {
     return defer.promise
 }
 
-function addReportTask(report) {
+
+const addReportTask = report => {
     let defer = q.defer()
     let sql = `INSERT INTO report.report_task(id, name, user_id, content, created_time, department_id, task_id, updated_time) VALUES ('${report.id}','${report.name}', '${report.user_id}', '${report.content}',' ${report.created_time.toISOString()}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
     
@@ -77,6 +82,7 @@ function addReportTask(report) {
     })
     return defer.promise
 }
+
 
 const getReportByTypeId = (id, type) => {
     let defer = q.defer();
@@ -93,9 +99,7 @@ const getReportByTypeId = (id, type) => {
 
 const addLogSerice = log => {
     let defer = q.defer();
-    // let sql = `INSERT INTO report.log_service(method, path, payload, created_at) VALUES ('${log.method}', '${log.path}', '${JSON.stringify(log.payload)}', '${log.created_at.toISOString()}')`;
     let sql = `INSERT INTO report.log(id, actionUserId, type, reportId, status, createdTime, service) VALUES ('${uuid()}','${log.actionUserId}', '${log.type}', '${log.reportId}', '${log.status}', '${log.createdTime}', '${log.service}')`;
-    // 
 
     client.query(sql, (err, res) => {
         if (err) {

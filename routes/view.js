@@ -1,14 +1,14 @@
-var express = require('express')
-var router = express.Router()
-var reportTask = require('../models/report_task')
+const express = require('express')
+const router = express.Router()
+const reportTask = require('../models/report_task')
 require("body-parser")
-var moment = require('moment')
+const moment = require('moment')
 const { generateLog } = require('../helper/generate_log')
 const uuid = require('uuid/v1');
 const axios = require('axios');
 const env = require('../helper/environment');
-var checkRole = require('../helper/checkRole');
-var departmentApi = require('../otherApi/departmentApi');
+const checkRole = require('../helper/checkRole');
+const departmentApi = require('../otherApi/departmentApi');
 const apiNhomHuy = require('../otherApi/apiNhomHuy');
 
 router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
@@ -38,19 +38,13 @@ router.post('/login/', [], (req, res) => {
             password: password
         }
     }).then(result => {
-        // console.log("1");
-        // if (result.data.errors[0].mes == null) {
         req.session.infoUser = result.data;
         console.log('result.data: ', result.data);
 
         env.headers = {
             Authorization: 'bearer ' + result.data.token
         };
-        // if (typeof result.data.errors[0].mes == "undefined") {
-        //     res.redirect(req.session.validUrl || '/');
 
-        // }
-        // else {
         if (result.data.token) {
             res.redirect(req.session.validUrl || '/');
         }
@@ -65,6 +59,7 @@ router.post('/login/', [], (req, res) => {
     }).catch(err => {
     });
 })
+
 
 router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     axios.get(env.baseUrl + '/admin/report-list').then(async result => {
@@ -142,6 +137,5 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
     });
 })
 
-// router.get('/temperature')
 
 module.exports = router;

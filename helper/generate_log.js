@@ -1,6 +1,7 @@
 const reportTask = require('../models/report_task')
 const uuid = require('uuid/v1');
 
+
 const generateLog = (req, _status) => {
   let createdTime = new Date();
   createdTime.setHours(createdTime.getHours() + 7);
@@ -23,11 +24,14 @@ const generateLog = (req, _status) => {
   }
 }
 
+
 const convertMethod = method => {
   if (method == "POST") return "CREATE"
   if (method == "PUT") return "UPDATE"
   if (method == "DELETE") return "DELETE"
 }
+
+
 
 module.exports = {
   generateLog
