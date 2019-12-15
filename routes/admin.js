@@ -8,31 +8,36 @@ const axios = require('axios');
 
 
 router.get('/report-list', (req, res, next) => {
-    
-    reportTask.getAllReportTask()
-        .then(report => {
-            for (i = 0; i < report.rows.length; i++) {
-                report.rows[i].content = JSON.parse(report.rows[i].content)
-            }
-            res.json(report.rows);
-            
-            
-        }).catch(() => {
-            
-            
-            res.json({ "status_code": "500" })
-        })
+
+  reportTask.getAllReportTask()
+    .then(report => {
+      for (i = 0; i < report.rows.length; i++) {
+        report.rows[i].content = JSON.parse(report.rows[i].content)
+      }
+      res.json(report.rows);
+
+
+    }).catch(() => {
+
+
+      res.json({ "status_code": "500" })
+    })
 })
 
 router.get('/report/:id', function (req, res, next) {
-    let id = req.params.id
-  
-    reportTask.getReportTaskById(id)
-      .then(report => {
-        res.json(JSON.stringify(report.rows[0]));
-      }).catch(() => {
-        res.json({ "status_code": "500" })
-      })
-  })
+  let id = req.params.id
+
+  reportTask.getReportTaskById(id)
+    .then(report => {
+      res.json(JSON.stringify(report.rows[0]));
+    }).catch(() => {
+      res.json({ "status_code": "500" })
+    })
+})
+
+router.get('/session', function (req, res, next) {
+  console.log(req.session);
+  res.json({ "1": "2" })
+})
 
 module.exports = router;
