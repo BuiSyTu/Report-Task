@@ -40,9 +40,12 @@ router.get('/info', [checkRole.hasUserId], (req, res) => {
 
 router.get('/hasDoer', [checkRole.hasUserId], async (req, res) => {
   let result = await axios.get(`${env.baseUrl_nhom3}/api/recurrent-tasks/`);
-  console.log(req.session.userId);
+
   let hasDoer = result.data.filter(item => item.hasOwnProperty('doer') && item.doer.id == req.session.infoUser.user.userId);
-  res.json({ hasDoer });
+
+  res.json( hasDoer );
 });
+
+
 
 module.exports = router;

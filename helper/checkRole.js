@@ -5,6 +5,7 @@ const hasUserId = (req, res, next) => {
     console.log("fullUrl", fullUrl);
 
     if (req.session.infoUser) {
+        console.log('req.session.infoUser: ', req.session.infoUser);
         next();
     } else {
         req.session.validUrl = fullUrl;
