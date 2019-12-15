@@ -9,7 +9,7 @@ const axios = require('axios');
 const env = require('../helper/environment');
 var checkRole = require('../helper/checkRole');
 var departmentApi = require('../otherApi/departmentApi');
-
+const apiNhomHuy = require('../otherApi/apiNhomHuy');
 
 router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
     let { id } = req.params;
@@ -24,7 +24,7 @@ router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
 
 
 router.get('/login', (req, res, next) => {
-    console.log('req.session.validUrl: ', req.session.validUrl);
+
     res.render("login", { message: req.session.validUrl });
 })
 
@@ -41,23 +41,20 @@ router.post('/login/', [], (req, res) => {
         }
     }).then(result => {
         req.session.infoUser = result.data;
+        env.headers = {
+            Authorization: 'bearer ' + result.data.token
+        };
+
+
         res.redirect(req.session.validUrl || '/');
 
+
     }).catch(err => {
-
-        console.log(err);
-
     });
 })
 
 router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     axios.get(env.baseUrl + '/admin/report-list').then(async result => {
-        // result.data.map(item => {
-        //     item.department_name = "xxx";
-        //     // console.log(item);
-
-        //     return item;
-        // })
         await Promise.all(result.data.map(async item => {
 
             let departInfo = await departmentApi.getDepartmentById(item.department_id);
@@ -75,9 +72,61 @@ router.get('/department/:id', async (req, res) => {
     // id = '5deb052c0351e97280dd297f';
     let { id } = req.params;
     let test = await departmentApi.getDepartmentById(id);
-    console.log(test);
-    
+
+
     res.json(test);
+});
+
+
+router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
+    let idReport = await apiNhomHuy.getIdToCreateReport();
+    let urlCreateReport = req.protocol + '://' + req.get('host') + '/create_report/'
+
+    for (let i = 0; i < 10; i++) {
+        let id = idReport[i];
+        let response = await axios.get(`${env.baseUrl_nhom3}/api/recurrent-tasks/${id}`);
+        response = response.data;
+        if (!response.doer) {
+            response.doer = "Không xác định"
+        }
+        let report = {
+            task_id: response._id,
+            name: response.name || "Không xác định",
+            doer: response.doer.name || "Không xác định",
+            coDoers: response.coDoers.length == 0 ? "Không xác định" : response.coDoers.map(item => item.name),
+            reviewer: response.reviewer.name || "Không xác định",
+            creator: response.creator.name || "Không xác định",
+            co_department: response.coDepartments.length == 0 ? "Không xác định" : response.coDepartments.map(item => item.name),
+            start: response.start,
+            finish: response.finish || "Không xác định",
+            status: response.status,
+            type: response.type
+        }
+        // 
+
+        // post form
+        try {
+            await axios({
+                method: 'POST',
+                url: urlCreateReport + id,
+                data: report,
+                headers: env.headers
+            });
+
+
+        } catch (error) {
+            return res.json({
+                statusCode: 500
+            });
+        }
+    };
+
+   
+
+    return res.json({
+        statusCode: 200,
+        idReport: idReport
+    });
 })
 
 // router.get('/temperature')

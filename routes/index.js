@@ -7,11 +7,11 @@ const { generateLog } = require('../helper/generate_log')
 const uuid = require('uuid/v1');
 const axios = require('axios');
 var checkRole = require('../helper/checkRole');
-
+const env = require('../helper/environment')
 router.get('/create_report/:id', (req, res, next) => {
   generateLog(req)
   id = req.params.id
-  link = `https://falling-frog-38743.pktriot.net/api/recurrent-tasks/${id}`
+  link = `${env.baseUrl_nhom3}/api/recurrent-tasks/${id}`
   axios.get(link)
     .then(respond => {
       if (!respond.data.finish) {
@@ -26,58 +26,42 @@ router.get('/create_report/:id', (req, res, next) => {
       if (!respond.data.coDoers) respond.data.doer = [{ name: 'Không xác định' }]
       respond.data.id = id
       res.render('report.ejs', respond.data)
+    }).catch(error => {
+      res.json({ status_code: 500 })
     })
 })
 
 router.post('/create_report/:id/', (req, res, next) => {
   let params = req.body;
 
-  params.created_time = new Date()
-  params.updated_time = new Date()
-  params.id = uuid()
-  params.user_id = uuid()
-  params.department_id = uuid()
-  params.name = "Bao cao so 1"
+  params.created_time = new Date();
+  params.updated_time = new Date();
+  params.created_time.setHours(params.created_time.getHours() + 7);
+  params.updated_time.setHours(params.updated_time.getHours() + 7);
+  params.id = uuid();
+  params.user_id = uuid();
+  params.department_id = uuid();
+  params.name = "Báo cáo ngày " + moment().format('DD/MM/YYYY HH:mm:ss');
 
-  keyParams = Object.keys(params)  
-  
+  keyParams = Object.keys(params)
+
   let obj = {};
   for (i = 0; i < keyParams.length; i++) {
-    if (keyParams[i] != "id" && keyParams[i] != "user_id" && keyParams[i] != "department_id" && keyParams[i] != "task_id")  {
+    if (keyParams[i] != "id" && keyParams[i] != "user_id" && keyParams[i] != "department_id" && keyParams[i] != "task_id") {
       toang = keyParams[i].replace(/ /g, '_')
-      console.log(toang);
-      
-      obj[toang] =  params[keyParams[i]];      
+      obj[toang] = params[keyParams[i]];
     }
-  }  
-
-  console.log(obj);
-  
-  
-
+  }
   params.content = JSON.stringify(obj)
-  // {
-  //   doer: params.doer,
-  //   co_doer: params.co_doer,
-  //   reviewer: params.reviewer,
-  //   creator: params.creator,
-  //   co_department: params.co_department,
-  //   start: params.start,
-  //   finish: params.finish,
-  //   status: params.status
-  // }
-
   params.status = 1
-
-
-
-
   reportTask.addReportTask(params)
     .then(result => {
-      status = 200
+      status = 200;
       generateLog(req, status)
-      res.json({ "status_code": status,
-    "id": params.id })
+      res.json({
+        "status_code": status,
+        "id": params.id
+      })
     }).catch(() => {
       status = 500
       generateLog(req, status)
@@ -130,15 +114,16 @@ router.get('/', [checkRole.hasUserId], function (req, res, next) {
 
 router.post('/', (req, res, next) => {
   let params = req.body
-  params.created_time = new Date()
-  params.updated_time = new Date()
+  params.created_time = new Date();
+  params.updated_time = new Date();
+  params.created_time.setHours(params.created_time.getHours() + 7);
+  params.updated_time.setHours(params.updated_time.getHours() + 7);
   params.id = uuid()
-
-
 
   reportTask.addReportTask(params)
     .then(result => {
-      status = 200
+      status = 200;
+
       generateLog(req, status)
       res.json({ "status_code": 200 })
     }).catch(() => {
