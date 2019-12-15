@@ -24,7 +24,6 @@ router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
 
 
 router.get('/login', (req, res, next) => {
-
     res.render("login", { message: req.session.validUrl });
 })
 
@@ -40,15 +39,17 @@ router.post('/login/', [], (req, res) => {
             password: password
         }
     }).then(result => {
+        // console.log("1");
+        // if (result.data.errors[0].mes == null) {
         req.session.infoUser = result.data;
         env.headers = {
             Authorization: 'bearer ' + result.data.token
         };
-
-
+        console.log(result.data.errors[0].mes != null);
         res.redirect(req.session.validUrl || '/');
-
-
+        // } else {
+        //     res.json({ mes: "Tài khoản không tồn tại" })
+        // }
     }).catch(err => {
     });
 })
@@ -121,7 +122,7 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
         }
     };
 
-   
+
 
     return res.json({
         statusCode: 200,
