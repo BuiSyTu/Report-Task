@@ -25,7 +25,7 @@ router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
 
 router.get('/login', (req, res, next) => {
 
-    res.render("login", { message: req.session.validUrl });
+    res.render("login", { message: req.session.validUrl, error: false });
 })
 
 
@@ -42,13 +42,26 @@ router.post('/login/', [], (req, res) => {
     }).then(result => {
 
         req.session.infoUser = result.data;
+        console.log('result.data: ', result.data);
+
         env.headers = {
             Authorization: 'bearer ' + result.data.token
         };
+        // if (typeof result.data.errors[0].mes == "undefined") {
+        //     res.redirect(req.session.validUrl || '/');
 
-
-        res.redirect(req.session.validUrl || '/');
-
+        // }
+        // else {
+        if (result.data.token) {
+            res.redirect(req.session.validUrl || '/');
+        }
+        else {
+            res.render("login", {
+                message: req.session.validUrl,
+                error: result.data.errors[0].mes
+            });
+        }
+        // }
 
     }).catch(err => {
     });
@@ -122,7 +135,7 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
         }
     };
 
-   
+
 
     return res.json({
         statusCode: 200,

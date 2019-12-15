@@ -17,11 +17,14 @@
 				<hr>
 				<!-- <p class="text-success text-center">Some message goes here</p> -->
 				<form action="/view/login" method="POST">
-				
-							<% if(message) { %>
-							<input type="text" class="form-control" name="validUrl" value="<%= message %>">
-							<br>
-							<% } %>
+
+					<% if(message) { %>
+					<input type="text" class="form-control" name="validUrl" value="<%= message %>">
+					<br>
+					<% } %>
+					<% if(error){%>
+					<p><%= error%></p>
+					<%}%>
 
 					<div class="form-group">
 
