@@ -6,7 +6,7 @@ var moment = require('moment');
 const uuid = require('uuid/v1');
 const axios = require('axios');
 const checkRole = require('../helper/checkRole')
-
+const env = require('../helper/environment')
 router.get('/report-list', (req, res, next) => {
 
   reportTask.getAllReportTask()
@@ -37,5 +37,12 @@ router.get('/report/:id', function (req, res, next) {
 
 router.get('/info', [checkRole.hasUserId], (req, res) => {
   res.json(req.session.infoUser);
-})
+});
+
+
+router.get('/hasDoer', async (req, res) => {
+  let result = await axios.get(`${env.baseUrl_nhom3}/api/recurrent-tasks/`);
+  let hasDoer = result.data.filter(item => item.hasOwnProperty('doer'));
+  res.json({ hasDoer });
+});
 module.exports = router;
