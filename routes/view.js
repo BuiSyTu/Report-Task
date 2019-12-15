@@ -8,6 +8,7 @@ const uuid = require('uuid/v1');
 const axios = require('axios');
 const env = require('../helper/environment');
 const checkRole = require('../helper/checkRole');
+const { generateReport } = require('../helper/generate_report');
 const departmentApi = require('../otherApi/departmentApi');
 const apiNhomHuy = require('../otherApi/apiNhomHuy');
 
@@ -39,7 +40,6 @@ router.post('/login/', [], (req, res) => {
         }
     }).then(result => {
         req.session.infoUser = result.data;
-        console.log('result.data: ', result.data);
 
         env.headers = {
             Authorization: 'bearer ' + result.data.token
@@ -137,5 +137,13 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
     });
 })
 
+router.get('/statistic_report', [checkRole.hasUserId], async (req, res) => {
+    res.render('statisticReport', { report: false })
+})
+router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
+    let { start, end } = req.body;
+    let report = await generateReport(start, end, req);
+    res.json({ start, end, report })
+})
 
 module.exports = router;
