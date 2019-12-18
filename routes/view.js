@@ -137,9 +137,12 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
     });
 })
 
+
 router.get('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     res.render('statisticReport', { start: false, end: false, report: false })
 })
+
+
 router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     let { start, end } = req.body;
     let report = await generateReport(start, end, req);
