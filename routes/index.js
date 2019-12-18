@@ -76,26 +76,6 @@ router.post('/create_report/:id/', (req, res, next) => {
 })
 
 
-router.get('/logs', (req, res, next) => {
-  reportTask.getLogService(req.query)
-    .then(result => {
-      let rs2 = result.map(item => {
-        return {
-          id: item.id,
-          actionUserId: item.actionuserid,
-          type: item.type,
-          reportId: item.reportid,
-          status: item.status,
-          createdTime: item.createdtime,
-          service: item.service
-        }
-      })
-      res.json(rs2);
-    }).catch(err => {
-      res.json({ "status_code": "500" })
-    })
-})
-
 // get all reports
 router.get('/', [checkRole.hasUserId], function (req, res, next) {
   generateLog(req)

@@ -8,6 +8,8 @@ var indexRouter = require('./routes/index');
 var viewRouter = require('./routes/view');
 var adminRouter = require('./routes/admin');
 var tubsRouter = require('./routes/tubs');
+var logRouter = require('./routes/log');
+var reportRouter = require('./routes/report')
 var app = express();
 var session = require('express-session');
 
@@ -33,6 +35,8 @@ app.use('/', indexRouter);
 app.use('/view', viewRouter);
 app.use('/admin', adminRouter);
 app.use('/tubs', tubsRouter);
+app.use('/logs', logRouter);
+app.use('/reports', reportRouter)
 
 app.use('/static', express.static(__dirname + "/public"));
 
