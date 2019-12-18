@@ -8,7 +8,7 @@ client.connect()
 const uuid = require('uuid/v1');
 
 
-const getAllReportTask= () => {
+const getAllReportTask = () => {
     let defer = q.defer()
     let query = client.query('SELECT * FROM report.report_task', (err, res) => {
         if (err) {
@@ -25,8 +25,8 @@ const getAllReportTask= () => {
 const getReportTaskById = id => {
     let defer = q.defer()
     let sql = `SELECT * FROM report.report_task WHERE id = '${id}'`
-    
-    
+
+
     client.query(sql, (err, res) => {
         if (err) {
             defer.reject(err)
@@ -56,7 +56,7 @@ const updateReportTask = (report) => {
 const deleteReportTask = id => {
     let defer = q.defer()
     let sql = `DELETE FROM report.report_task WHERE id = '${id}'`
-    
+
 
     client.query(sql, (err, res) => {
         if (err) {
@@ -72,7 +72,7 @@ const deleteReportTask = id => {
 const addReportTask = report => {
     let defer = q.defer()
     let sql = `INSERT INTO report.report_task(id, name, user_id, content, created_time, department_id, task_id, updated_time) VALUES ('${report.id}','${report.name}', '${report.user_id}', '${report.content}',' ${report.created_time.toISOString()}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
-    
+
 
     let query = client.query(sql, (err, res) => {
         if (err) defer.reject(err)
@@ -114,7 +114,7 @@ const addLogSerice = log => {
 
 const getLogService = async (query) => {
     let { start, end } = query;
-    
+
 
     let sql;
     if (start == null && end == null) {
@@ -124,15 +124,30 @@ const getLogService = async (query) => {
     }
     try {
         const { rows } = await client.query(sql);
-        
-        
+
+
         if (!rows[0]) {
             return { 'message': 'log service not found' };
         }
         return rows;
     } catch (error) {
-        
+
     }
+}
+
+const addReportStatisticTask = report => {
+    let defer = q.defer()
+    let { id, name: na, start: st, end, finished_task: fi, overdue_task: ov, doing_task: di, cancel_task: ca, created_time: crt, share: sh, creator_id: cri, creator_name: crn } = report;
+    let sql = `INSERT INTO report.report(id, name, start_time, end_time, finished_task, overdue_task, doing_task, cancel_task, created_time, share, creator_id, creator_name)`
+        + ` VALUES ('${id}','${na}', '${st}', '${end}','${fi}', '${ov}', '${di}', '${ca}', '${crt}', '${sh.toString()}','${cri}','${crn}')`;
+
+    client.query(sql, (err, res) => {
+        if (err) { defer.reject(err) }
+        else {
+            defer.resolve(res);
+        }
+    })
+    return defer.promise
 }
 
 
@@ -145,5 +160,6 @@ module.exports = {
     deleteReportTask,
     getReportByTypeId,
     addLogSerice,
-    getLogService
+    getLogService,
+    addReportStatisticTask
 }
