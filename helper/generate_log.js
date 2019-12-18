@@ -10,7 +10,7 @@ const generateLog = (req, _status) => {
       actionUserId: uuid(),
       type: convertMethod(req.method),
       reportId: "req.body.id",
-      status: _status,
+      status: convertStatus(_status),
       createdTime: createdTime.toISOString(),
       service: "Report_task_service"
     }
@@ -27,8 +27,14 @@ const generateLog = (req, _status) => {
 
 const convertMethod = method => {
   if (method == "POST") return "CREATE"
-  if (method == "PUT") return "UPDATE"
+  if (method == "PUT") return "EDIT"
   if (method == "DELETE") return "DELETE"
+}
+
+
+const convertStatus = status => {
+  if (status == 200 || status == "200") return "SUCCESS"
+  if (status == 500 || status == "500") return "ERROR"
 }
 
 
