@@ -10,7 +10,7 @@ const uuid = require('uuid/v1');
 
 const getAllReportTask = () => {
     let defer = q.defer()
-    let query = client.query('SELECT * FROM report.report_task', (err, res) => {
+    client.query('SELECT * FROM report.report_task', (err, res) => {
         if (err) {
             defer.reject(err)
         } else {
@@ -74,7 +74,7 @@ const addReportTask = report => {
     let sql = `INSERT INTO report.report_task(id, name, user_id, content, created_time, department_id, task_id, updated_time) VALUES ('${report.id}','${report.name}', '${report.user_id}', '${report.content}',' ${report.created_time.toISOString()}', '${report.department_id}', '${report.task_id}', '${report.updated_time.toISOString()}')`
 
 
-    let query = client.query(sql, (err, res) => {
+    client.query(sql, (err, res) => {
         if (err) defer.reject(err)
         else {
             defer.resolve(res);
@@ -137,9 +137,9 @@ const getLogService = async (query) => {
 
 const addReportStatisticTask = report => {
     let defer = q.defer()
-    let { id, name: na, start: st, end, finished_task: fi, overdue_task: ov, doing_task: di, cancel_task: ca, created_time: crt, share: sh, creator_id: cri, creator_name: crn } = report;
-    let sql = `INSERT INTO report.report(id, name, start_time, end_time, finished_task, overdue_task, doing_task, cancel_task, created_time, share, creator_id, creator_name)`
-        + ` VALUES ('${id}','${na}', '${st}', '${end}','${fi}', '${ov}', '${di}', '${ca}', '${crt}', '${sh.toString()}','${cri}','${crn}')`;
+    let { id, name: na, start: st, end, finished_task: fi, overdue_task: ov, doing_task: di, cancel_task: ca, created_time: crt, share: sh, creator_id: cri, creator_name: crn, description: de } = report;
+    let sql = `INSERT INTO report.report(id, name, start_time, end_time, finished_task, overdue_task, doing_task, cancel_task, created_time, share, creator_id, creator_name, description)`
+        + ` VALUES ('${id}','${na}', '${st}', '${end}','${fi}', '${ov}', '${di}', '${ca}', '${crt}', '${sh.toString()}','${cri}','${crn}','${de}')`;
 
     client.query(sql, (err, res) => {
         if (err) { defer.reject(err) }
@@ -151,6 +151,49 @@ const addReportStatisticTask = report => {
 }
 
 
+// thong ke
+const getAllStatisticReportTask = () => {
+    let defer = q.defer()
+    client.query('SELECT * FROM report.report', (err, res) => {
+        if (err) {
+            defer.reject(err)
+        } else {
+            defer.resolve(res.rows)
+        }
+    })
+
+    return defer.promise
+}
+
+const getStatisticReportByTypeId = (id, type) => {
+    let defer = q.defer();
+    let sql = `SELECT * from report.report WHERE ${type} = '${id}'`;
+    console.log(sql);
+
+    client.query(sql, (err, res) => {
+        if (err) { defer.reject(err); }
+        else {
+            defer.resolve(res.rows[0]);
+        }
+    })
+    return defer.promise;
+}
+
+
+const deleteStatisticReportTask = id => {
+    let defer = q.defer()
+    let sql = `DELETE FROM report.report WHERE id = '${id}'`
+
+
+    client.query(sql, (err, res) => {
+        if (err) {
+            defer.reject(err)
+        } else {
+            defer.resolve(res)
+        }
+    })
+    return defer.promise
+}
 
 module.exports = {
     getAllReportTask,
@@ -161,5 +204,8 @@ module.exports = {
     getReportByTypeId,
     addLogSerice,
     getLogService,
-    addReportStatisticTask
+    addReportStatisticTask,
+    getAllStatisticReportTask,
+    getStatisticReportByTypeId,
+    deleteStatisticReportTask
 }

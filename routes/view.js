@@ -48,7 +48,7 @@ router.post('/login/', [], (req, res) => {
         };
 
         if (result.data.token) {
-            res.redirect(req.session.validUrl || '/reports/all');
+            res.redirect(req.session.validUrl || '/view/all-statistic-report');
             // res.redirect('/reports/all');
         }
         else {
@@ -148,23 +148,44 @@ router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
         })
 
 })
+router.get('/logout', (req, res, next) => {
+    req.session.destroy();
+    res.redirect('login')
+})
 
-// router.get('/statistic_report_test', [checkRole.hasUserId], async (req, res) => {
-//     res.render('statisticReportTest', { start: null, end: null, report: false })
-// })
-// router.post('/statistic_report_test', [checkRole.hasUserId], async (req, res) => {
-//     let { start, end } = req.body;
-
-//     let report = await generateReport(start, end, req);
-//     report = report[0];
-//     reportTask.addReportStatisticTask(report)
-//         .then(result => {
-//             res.render('statisticReportTest', { start, end, report })
-//         }).catch(err => {
-//             return res.json({ status_code: 500 })
-//         })
-
-// })
+router.get('/all-statistic-report', [checkRole.hasUserId], (req, res) => {
+    reportTask.getAllStatisticReportTask()
+        .then(report => {
+            // console.log(report);
+            res.render('statistic/allStatisticReport', { report });
+        }).catch(err => {
+            return res.json({ status_code: 500 })
+        })
+})
+router.get('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => {
+    let { id } = req.params;
+    reportTask.getStatisticReportByTypeId(id, 'id')
+        .then(report => {
+            console.log('report: ', report);
+            
+            res.render('statistic/detailStatisticReport', { report })
+        }).catch(() => {
+            res.json({ "status_code": 500 })
+        })
+})
+router.delete('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => {
+    let { id } = req.params;
+    reportTask.deleteStatisticReportTask(id)
+        .then(result => {
+            status = 200
+            generateLog(req, status)
+            res.json({ "status_code": 200 })
+        }).catch(() => {
+            status = 500
+            generateLog(req, status)
+            res.json({ "status_code": 500 })
+        })
+})
 
 
 module.exports = router;
