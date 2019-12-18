@@ -147,7 +147,15 @@ router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     let { start, end } = req.body;
     let report = await generateReport(start, end, req);
     report = report[0];
-    res.render('statisticReport', { start, end, report })
+    reportTask.addReportStatisticTask(report)
+        .then(result => {
+            res.render('statisticReport', { start, end, report })
+
+        }).catch(err => {
+            console.log(err);
+            
+            return res.json({ status_code: 500 })
+        })
 
 })
 
