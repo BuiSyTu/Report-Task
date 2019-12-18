@@ -1,13 +1,10 @@
-const reportTask = require('../models/report_task')
-const moment = require('moment')
 const axios = require('axios');
-const env = require('../helper/environment');
-const checkRole = require('../helper/checkRole');
-const departmentApi = require('../otherApi/departmentApi');
-const apiNhomHuy = require('../otherApi/apiNhomHuy');
-const { createDate } = require('./convertStringToLocaleDate');
-const { genLocaleDate } = require('./convertStringToLocaleDate');
 const uuid = require('uuid/v1');
+
+const { createDate } = require('./convertStringToLocaleDate');
+const env = require('../helper/environment');
+const { genLocaleDate } = require('./convertStringToLocaleDate');
+
 
 const generateReport = async (start, end, req) => {
     let result = await axios.get(`${env.baseUrl_nhom3}/api/recurrent-tasks/`);
@@ -37,6 +34,7 @@ const generateReport = async (start, end, req) => {
     }
     return hasDoer;
 }
+
 
 module.exports = {
     generateReport

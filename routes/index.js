@@ -1,13 +1,16 @@
-const express = require('express')
-const router = express.Router()
-const reportTask = require('../models/report_task')
 require("body-parser")
-const moment = require('moment')
-const { generateLog } = require('../helper/generate_log')
-const uuid = require('uuid/v1');
+
 const axios = require('axios');
+const express = require('express')
+const moment = require('moment')
+const uuid = require('uuid/v1');
+
 const checkRole = require('../helper/checkRole');
 const env = require('../helper/environment')
+const { generateLog } = require('../helper/generate_log')
+const reportTask = require('../models/report_task')
+
+const router = express.Router()
 
 
 router.get('/create_report/:id', (req, res, next) => {
@@ -88,8 +91,6 @@ router.get('/logs', (req, res, next) => {
         }
       })
       res.json(rs2);
-      // 
-
     }).catch(err => {
       res.json({ "status_code": "500" })
     })
@@ -202,7 +203,6 @@ router.get('/projects/:id', (req, res, next) => {
 })
 
 
-
 // get report by deparment id
 router.get('/departments/:id', (req, res, next) => {
   generateLog(req)
@@ -229,5 +229,6 @@ router.get('/tasks/:id', (req, res, next) => {
       res.json("status_code: 500")
     })
 })
+
 
 module.exports = router

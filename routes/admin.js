@@ -1,12 +1,15 @@
-const express = require('express')
-const router = express.Router()
-const reportTask = require('../models/report_task');
 require("body-parser");
-const moment = require('moment');
-const uuid = require('uuid/v1');
+
 const axios = require('axios');
+const express = require('express')
+
 const checkRole = require('../helper/checkRole')
 const env = require('../helper/environment')
+const reportTask = require('../models/report_task');
+
+const router = express.Router()
+
+
 router.get('/report-list', (req, res, next) => {
   reportTask.getAllReportTask()
     .then(report => {
@@ -44,7 +47,6 @@ router.get('/hasDoer', [checkRole.hasUserId], async (req, res) => {
 
   res.json(hasDoer);
 });
-
 
 
 module.exports = router;
