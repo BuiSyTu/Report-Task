@@ -7,13 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var viewRouter = require('./routes/view');
 var adminRouter = require('./routes/admin');
+var tubsRouter = require('./routes/tubs');
 var app = express();
 var session = require('express-session');
-// const swaggerUi = require('swagger-ui-express');
-// const swaggerDocument = require('./swagger.json');
-
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,6 +32,7 @@ app.use(session({
 app.use('/', indexRouter);
 app.use('/view', viewRouter);
 app.use('/admin', adminRouter);
+app.use('/tubs', tubsRouter);
 
 app.use('/static', express.static(__dirname + "/public"));
 

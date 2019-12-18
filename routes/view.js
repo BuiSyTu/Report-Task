@@ -1,14 +1,15 @@
-var express = require('express')
-var router = express.Router()
-var reportTask = require('../models/report_task')
+const express = require('express')
+const router = express.Router()
+const reportTask = require('../models/report_task')
 require("body-parser")
-var moment = require('moment')
+const moment = require('moment')
 const { generateLog } = require('../helper/generate_log')
 const uuid = require('uuid/v1');
 const axios = require('axios');
 const env = require('../helper/environment');
-var checkRole = require('../helper/checkRole');
-var departmentApi = require('../otherApi/departmentApi');
+const checkRole = require('../helper/checkRole');
+const { generateReport } = require('../helper/generate_report');
+const departmentApi = require('../otherApi/departmentApi');
 const apiNhomHuy = require('../otherApi/apiNhomHuy');
 
 router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
@@ -24,10 +25,8 @@ router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
 
 
 router.get('/login', (req, res, next) => {
-
-    res.render("login", { message: req.session.validUrl });
+    res.render("login", { message: req.session.validUrl, error: false });
 })
-
 
 router.post('/login/', [], (req, res) => {
     let { username, password } = req.body;
@@ -40,19 +39,27 @@ router.post('/login/', [], (req, res) => {
             password: password
         }
     }).then(result => {
-
         req.session.infoUser = result.data;
+
         env.headers = {
             Authorization: 'bearer ' + result.data.token
         };
 
-
-        res.redirect(req.session.validUrl || '/');
-
+        if (result.data.token) {
+            res.redirect(req.session.validUrl || '/');
+        }
+        else {
+            res.render("login", {
+                message: req.session.validUrl,
+                error: result.data.errors[0].mes
+            });
+        }
+        // }
 
     }).catch(err => {
     });
 })
+
 
 router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     axios.get(env.baseUrl + '/admin/report-list').then(async result => {
@@ -83,14 +90,8 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
     let idReport = await apiNhomHuy.getIdToCreateReport();
     let urlCreateReport = req.protocol + '://' + req.get('host') + '/create_report/'
 
-    let idReportFake = [];
     for (let i = 0; i < 10; i++) {
-        idReportFake.push(idReport[i]);
-    };
-
-    await axios.all(idReportFake.map(async id => {
-
-        // create form report
+        let id = idReport[i];
         let response = await axios.get(`${env.baseUrl_nhom3}/api/recurrent-tasks/${id}`);
         response = response.data;
         if (!response.doer) {
@@ -114,7 +115,7 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
         // post form
         try {
             await axios({
-                method: 'post',
+                method: 'POST',
                 url: urlCreateReport + id,
                 data: report,
                 headers: env.headers
@@ -126,7 +127,9 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
                 statusCode: 500
             });
         }
-    }))
+    };
+
+
 
     return res.json({
         statusCode: 200,
@@ -134,6 +137,16 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
     });
 })
 
-// router.get('/temperature')
+
+router.get('/statistic_report', [checkRole.hasUserId], async (req, res) => {
+    res.render('statisticReport', { report: false })
+})
+
+
+router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
+    let { start, end } = req.body;
+    let report = await generateReport(start, end, req);
+    res.json({ start, end, report })
+})
 
 module.exports = router;
