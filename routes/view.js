@@ -11,7 +11,7 @@ const checkRole = require('../helper/checkRole');
 const { generateReport } = require('../helper/generate_report');
 const departmentApi = require('../otherApi/departmentApi');
 const apiNhomHuy = require('../otherApi/apiNhomHuy');
-
+const { genLocaleDate } = require('../helper/convertStringToLocaleDate');
 router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
     let { id } = req.params;
 
@@ -139,14 +139,16 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
 
 
 router.get('/statistic_report', [checkRole.hasUserId], async (req, res) => {
-    res.render('statisticReport', { report: false })
+    res.render('statisticReport', { start: false, end: false, report: false })
 })
 
 
 router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     let { start, end } = req.body;
     let report = await generateReport(start, end, req);
-    res.json({ start, end, report })
+    report = report[0];
+    res.render('statisticReport', { start, end, report })
+
 })
 
 module.exports = router;

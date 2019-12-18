@@ -29,46 +29,119 @@
 </head>
 
 <body>
-    <div class="container" style="text-align: center;margin-top: 10px;">
+    <div class="container" style="margin-top: 10px;">
         <h2 style="margin-bottom: 20px;">Thống kê báo cáo</h2>
-        <div class="col-md-2" style="text-align: center; margin: auto">
-            <h4>Thời gian</h4>
-        </div>
+        <h4 style="margin: 10px">Thời gian</h4>
 
-        <form action="/view/statistic_report" method="POST" role="form">
+        <form action="/view/statistic_report" method="POST" role="form"">
             <!-- start -->
-            <div class='col-md-3'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker6'>
-                        <input type='text' name='start' class="form-control" required/>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </div>
+            <div class='col-md-4'>
+                <div class=" form-group">
+            <div class='input-group date' id='datetimepicker6'>
+                <input type='text' name='start' class="form-control" required value="<%= start %>" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
             </div>
-            <!-- end -->
-            <div class='col-md-3'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker7'>
-                        <input type='text' name='end' class="form-control" required/>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-success">Tạo báo cáo</button>
-        </form>
-
-        <% if(!report) {%>
-        <div style="text-align: center; margin-top:20px">
-            <h4>Hiện chưa có báo cáo</h4>
-        </div>
-        <%} else {%>
-
-        <%}%>
     </div>
+    </div>
+    <!-- end -->
+    <div class='col-md-4'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker7'>
+                <input type='text' name='end' class="form-control" required value="<%= end %>" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Tạo báo cáo</button>
+    <br>
+    <br>
+
+    <div style="margin: 10px;">
+        <h4>Tên báo cáo: </h4>
+        <div class="input-group" style="margin-left: 5px">
+            <input type="text" name="report_name" value="<%= report.name %>" id="input" class="form-control"
+                required="required">
+        </div>
+        <h4>Mô tả: </h4>
+        <textarea name="description" style="margin-top: 10px; margin-left:5px" id="inputdescription"
+            class="form-control" rows="3" required="required"><%= report.description %></textarea>
+
+    </div>
+
+    </form>
+
+    <% if(!report) {%>
+    <div style="text-align: center; margin-top:20px">
+        <h4>Hiện chưa có báo cáo</h4>
+    </div>
+    <%} else {%>
+    <br>
+    <div class="table-responsive text-center">
+        <table class="table table-hover table-bordered table-striped table-condensed">
+            <tbody>
+                <!-- id
+                    name
+                    start
+                    end
+                    finished_task
+                    doing_task
+                    cancel_task
+                    overdue_task
+                    created_time -->
+                <tr>
+                    <th>Id</th>
+                    <td><%= report.id%></td>
+                </tr>
+                <tr>
+                    <th>Tên báo cáo</th>
+                    <td><%= report.name%></td>
+                </tr>
+                <tr>
+                    <th>Người thực hiện</th>
+                    <td><%= report.creator_name%></td>
+                </tr>
+                <tr>
+                    <th>Thời gian</th>
+                    <td><%= start %><i class="fa fa-arrow-right" style="margin-right: 5px; margin-left: 5px"
+                            aria-hidden="true"></i><%= end %></td>
+                </tr>
+                <tr>
+                    <th>Task hoàn thành</th>
+                    <td><%= report.finished_task%></td>
+                </tr>
+                <tr>
+                    <th>Task đang làm</th>
+                    <td><%= report.doing_task%></td>
+                </tr>
+                <tr>
+                    <th>Task hủy bỏ</th>
+                    <td><%= report.cancel_task%></td>
+                </tr>
+                <tr>
+                    <th>Task quá hạn</th>
+                    <td><%= report.overdue_task%></td>
+                </tr>
+                <tr>
+                    <th>Thời gian tạo</th>
+                    <td><%= report.created_time%></td>
+                </tr>
+                <tr>
+                    <th>Mô tả</th>
+                    <td><%= report.description%></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <%}%>
+
+    </div>
+
     <script type="text/javascript">
         $(function () {
 

@@ -5,7 +5,12 @@ const createDate = date => {
     date.setHours(date.getHours() + 7);
     return date;
 }
+const genLocaleDate = date =>{
+    date.setHours(date.getHours() + 7);
+    return date;
+}
 
 module.exports = {
-    createDate
+    createDate,
+    genLocaleDate
 }
