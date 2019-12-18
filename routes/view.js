@@ -48,7 +48,7 @@ router.post('/login/', [], (req, res) => {
         };
 
         if (result.data.token) {
-            res.redirect(req.session.validUrl || '/');
+            res.redirect(req.session.validUrl || '/reports/all');
             // res.redirect('/reports/all');
         }
         else {
