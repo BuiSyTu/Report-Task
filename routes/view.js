@@ -1,17 +1,18 @@
-const express = require('express')
-const router = express.Router()
-const reportTask = require('../models/report_task')
 require("body-parser")
-const moment = require('moment')
-const { generateLog } = require('../helper/generate_log')
-const uuid = require('uuid/v1');
+
 const axios = require('axios');
-const env = require('../helper/environment');
-const checkRole = require('../helper/checkRole');
-const { generateReport } = require('../helper/generate_report');
-const departmentApi = require('../otherApi/departmentApi');
+const express = require('express')
+
 const apiNhomHuy = require('../otherApi/apiNhomHuy');
-const { genLocaleDate } = require('../helper/convertStringToLocaleDate');
+const checkRole = require('../helper/checkRole');
+const departmentApi = require('../otherApi/departmentApi');
+const env = require('../helper/environment');
+const { generateReport } = require('../helper/generate_report');
+const reportTask = require('../models/report_task')
+
+const router = express.Router()
+
+
 router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
     let { id } = req.params;
 
@@ -27,6 +28,7 @@ router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
 router.get('/login', (req, res, next) => {
     res.render("login", { message: req.session.validUrl, error: false });
 })
+
 
 router.post('/login/', [], (req, res) => {
     let { username, password } = req.body;
@@ -54,8 +56,6 @@ router.post('/login/', [], (req, res) => {
                 error: result.data.errors[0].mes
             });
         }
-        // }
-
     }).catch(err => {
     });
 })
@@ -64,10 +64,8 @@ router.post('/login/', [], (req, res) => {
 router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     axios.get(env.baseUrl + '/admin/report-list').then(async result => {
         await Promise.all(result.data.map(async item => {
-
             let departInfo = await departmentApi.getDepartmentById(item.department_id);
             item.department_name = departInfo.depart_name;
-
             return item;
         })).then(result => {
             res.render("reportList", { report: result });
@@ -76,12 +74,11 @@ router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     });
 });
 
+
 router.get('/department/:id', async (req, res) => {
     // id = '5deb052c0351e97280dd297f';
     let { id } = req.params;
     let test = await departmentApi.getDepartmentById(id);
-
-
     res.json(test);
 });
 
@@ -110,7 +107,6 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
             status: response.status,
             type: response.type
         }
-        // 
 
         // post form
         try {
@@ -120,16 +116,12 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
                 data: report,
                 headers: env.headers
             });
-
-
         } catch (error) {
             return res.json({
                 statusCode: 500
             });
         }
     };
-
-
 
     return res.json({
         statusCode: 200,
@@ -150,5 +142,6 @@ router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     res.render('statisticReport', { start, end, report })
 
 })
+
 
 module.exports = router;

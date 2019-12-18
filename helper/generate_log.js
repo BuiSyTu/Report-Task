@@ -1,5 +1,6 @@
-const reportTask = require('../models/report_task')
 const uuid = require('uuid/v1');
+
+const reportTask = require('../models/report_task')
 
 
 const generateLog = (req, _status) => {
