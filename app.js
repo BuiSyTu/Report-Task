@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var viewRouter = require('./routes/view');
 var adminRouter = require('./routes/admin');
 var tubsRouter = require('./routes/tubs');
+var quangddRouter = require('./routes/quangdd');
 var app = express();
 var session = require('express-session');
 
@@ -33,6 +34,7 @@ app.use('/', indexRouter);
 app.use('/view', viewRouter);
 app.use('/admin', adminRouter);
 app.use('/tubs', tubsRouter);
+app.use('/quangdd', quangddRouter);
 
 app.use('/static', express.static(__dirname + "/public"));
 

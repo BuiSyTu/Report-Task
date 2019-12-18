@@ -131,25 +131,39 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
 
 
 router.get('/statistic_report', [checkRole.hasUserId], async (req, res) => {
-    res.render('statisticReport', { start: false, end: false, report: false })
+    res.render('statisticReport', { start: null, end: null, report: false })
 })
-
 
 router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     let { start, end } = req.body;
+
     let report = await generateReport(start, end, req);
     report = report[0];
     reportTask.addReportStatisticTask(report)
         .then(result => {
             res.render('statisticReport', { start, end, report })
-
         }).catch(err => {
-            console.log(err);
-            
             return res.json({ status_code: 500 })
         })
 
 })
+
+// router.get('/statistic_report_test', [checkRole.hasUserId], async (req, res) => {
+//     res.render('statisticReportTest', { start: null, end: null, report: false })
+// })
+// router.post('/statistic_report_test', [checkRole.hasUserId], async (req, res) => {
+//     let { start, end } = req.body;
+
+//     let report = await generateReport(start, end, req);
+//     report = report[0];
+//     reportTask.addReportStatisticTask(report)
+//         .then(result => {
+//             res.render('statisticReportTest', { start, end, report })
+//         }).catch(err => {
+//             return res.json({ status_code: 500 })
+//         })
+
+// })
 
 
 module.exports = router;
