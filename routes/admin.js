@@ -42,7 +42,7 @@ router.get('/hasDoer', [checkRole.hasUserId], async (req, res) => {
 
   let hasDoer = result.data.filter(item => item.hasOwnProperty('doer') && item.doer.id == req.session.infoUser.user.userId);
 
-  res.json( hasDoer );
+  res.json(hasDoer);
 });
 
 
