@@ -7,6 +7,7 @@ const apiNhomHuy = require('../otherApi/apiNhomHuy');
 const checkRole = require('../helper/checkRole');
 const departmentApi = require('../otherApi/departmentApi');
 const env = require('../helper/environment');
+const { generateLog } = require('../helper/generate_log')
 const { generateReport } = require('../helper/generate_report');
 const reportTask = require('../models/report_task')
 
@@ -95,8 +96,10 @@ router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     report = report[0];
     reportTask.addReportStatisticTask(report)
         .then(result => {
+            generateLog(req, 200)
             res.render('statisticReport', { start, end, report })
         }).catch(err => {
+            generateLog(req, 500)
             return res.json({ status_code: 500 })
         })
 
@@ -125,7 +128,7 @@ router.get('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => {
     reportTask.getStatisticReportByTypeId(id, 'id')
         .then(report => {
             console.log('report: ', report);
-            
+
             res.render('statistic/detailStatisticReport', { report })
         }).catch(() => {
             res.json({ "status_code": 500 })
