@@ -36,7 +36,7 @@ router.get('/report/:id', (req, res, next) => {
 
 
 router.get('/info', [checkRole.hasUserId], (req, res) => {
-  res.json(req.session.infoUser);
+  res.render('userInfo', { user: req.session.infoUser });
 });
 
 

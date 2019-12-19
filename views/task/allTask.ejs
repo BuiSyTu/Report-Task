@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Danh sách task</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css"
+        integrity="sha256-Md8eaeo67OiouuXAi8t/Xpd8t2+IaJezATVTWbZqSOw=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"> -->
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <% include ../components/sidebar1_custom %>
+        <div class="container">
+            <h2 style="text-align: center; margin-top: 20px;">Danh sách báo cáo</h2>
+            <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
+            <br>
+
+            <table class="table">
+                <thead>
+                    <tr style="text-align: center;">
+                        <th>STT</th>
+                        <th>Tên task</th>
+                        <th>Tiến độ</th>
+                        <th>Mô tả</th>
+                        <th>Thời hạn</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(report.length != 0) {%>
+                    <% for(let i = 0; i < report.length; i++){%>
+                    <tr style="text-align: center;">
+                        <td><%= i+1 %></td>
+                        <td><%= report[i].name%></td>
+                        <td><%= report[i].percentComplete%></td>
+                        <td><%= report[i].description%></td>
+                        <td><%= report[i].status %></td>
+                        <td>
+                            <button style="border: none;" type="button" class="btn btn-outline-info">
+                                <a href="/reports/<%= report[i].id %>">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i> Xem chi tiết
+                                </a>
+                            </button>
+                            <br>
+                            <button style="border: none;" class="btn btn-outline-danger delete_task"
+                                report_id="<%= report[i].id%>" report_name="<%= report[i].name %>">
+                                <i class="fa fa-trash-o" style="font-size: x-large;"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <% }%>
+
+                    <%} else {%>
+                    <tr style="text-align: center;">
+                        <td colspan="5">
+                            <p style="color: gray;">Hiện tại không có task dành cho bạn</p>
+                        </td>
+                    </tr>
+                    <%}%>
+            </tbody>
+            </table>
+            <hr>
+          </div>
+    </div>
+  
+  <script src="/static/js/post.js"></script>
+
+</body>
+
+</html>
