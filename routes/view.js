@@ -33,7 +33,7 @@ router.get('/login', (req, res, next) => {
 
 
 router.post('/login/', [], (req, res) => {
-    let { username, password } = req.body;
+    let { username, password } = req.body
 
     axios({
         method: 'post',
@@ -58,8 +58,36 @@ router.post('/login/', [], (req, res) => {
                 error: result.data.errors[0].mes
             });
         }
-    }).catch(err => {
-    });
+    })
+        .catch(err => {
+            axios({
+                method: 'post',
+                url: 'https://pmptn13.herokuapp.com/users/login',
+                data: {
+                    email: username,
+                    password: password
+                }
+            }).then(result => {
+                req.session.infoUser = result.data;
+
+                env.headers = {
+                    Authorization: 'bearer ' + result.data.token
+                };
+
+                if (result.data.token) {
+                    res.redirect(req.session.validUrl || '/reports/all');
+                }
+                else {
+                    res.render("login", {
+                        message: req.session.validUrl,
+                        error: result.data.errors[0].mes
+                    });
+                }
+            }).catch(err => {
+                res.json({ "status_code": 500 })
+            })
+        })
+
 })
 
 
@@ -96,7 +124,7 @@ router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     let report = await generateReport(start, end, req);
     report = report[0];
     console.log(report);
-    
+
     reportTask.addReportStatisticTask(report)
         .then(result => {
             generateLog(req, 200)
