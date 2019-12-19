@@ -11,7 +11,7 @@ const { generateLog } = require('../helper/generate_log')
 const checkRole = require('../helper/checkRole');
 const env = require('../helper/environment')
 
-
+const log = require('../models/log');
 router.get('/create_report/:id', (req, res, next) => {
   generateLog(req)
   let id = req.params.id
@@ -76,7 +76,7 @@ router.post('/create_report/:id/', (req, res, next) => {
 
 
 router.get('/logs', (req, res, next) => {
-  reportTask.getLogService(req.query)
+  log.getLogService(req.query)
     .then(result => {
       let rs2 = result.map(item => {
         return {
