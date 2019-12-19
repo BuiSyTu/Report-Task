@@ -7,12 +7,12 @@ const generateLog = (req, _status) => {
   let createdTime = new Date();
   createdTime.setHours(createdTime.getHours() + 7);
 
-  // console.log(req.session);
-  console.log(req.method);
+  console.log(req.session.infoUser);
   console.log(req.session.infoUser.user._id);
 
   if (req.method != "GET") {
     let log = {
+      id: uuid(),
       actionUserId: req.session.infoUser.user._id,
       type: convertMethod(req.method),
       reportId: "req.body.id",

@@ -7,9 +7,9 @@ client.connect()
 
 const addLogSerice = log => {
     let defer = q.defer();
-    let sql = `INSERT INTO report.log(id, actionUserId, type, reportId, status, createdTime, service) VALUES ('${uuid()}','${log.actionUserId}', '${log.type}', '${log.reportId}', '${log.status}', '${log.createdTime}', '${log.service}')`;
+    let sql = `INSERT INTO report.log(id, actionUserId, type, reportId, status, createdTime, service) VALUES ('${log.id}','${log.actionUserId}', '${log.type}', '${log.reportId}', '${log.status}', '${log.createdTime}', '${log.service}')`;
 
-    console.log(sql);
+    // console.log(sql);
 
     client.query(sql, (err, res) => {
         if (err) {
