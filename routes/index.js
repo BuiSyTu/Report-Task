@@ -9,6 +9,12 @@ const axios = require('axios');
 const checkRole = require('../helper/checkRole');
 const env = require('../helper/environment')
 
+router.get('/test1', (req, res, next) => {
+  arr = [1, 2, 3]
+  arr.toString();
+  res.json(JSON.parse('[' + arr.toString() + ']'))
+})
+
 
 router.get('/create_report/:id', (req, res, next) => {
   generateLog(req)
@@ -229,5 +235,6 @@ router.get('/tasks/:id', (req, res, next) => {
       res.json("status_code: 500")
     })
 })
+
 
 module.exports = router

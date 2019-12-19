@@ -54,8 +54,6 @@ router.post('/login/', [], (req, res) => {
                 error: result.data.errors[0].mes
             });
         }
-        // }
-
     }).catch(err => {
     });
 })
@@ -80,7 +78,6 @@ router.get('/department/:id', async (req, res) => {
     // id = '5deb052c0351e97280dd297f';
     let { id } = req.params;
     let test = await departmentApi.getDepartmentById(id);
-
 
     res.json(test);
 });
@@ -129,17 +126,18 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
         }
     };
 
-
-
     return res.json({
         statusCode: 200,
         idReport: idReport
     });
 })
 
+
 router.get('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     res.render('statisticReport', { report: false })
 })
+
+
 router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     let { start, end } = req.body;
     let report = await generateReport(start, end, req);
