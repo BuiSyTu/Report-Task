@@ -57,7 +57,15 @@
                         </label>
 
                         <textarea name="description" style="margin-top: 10px;" id=" inputdescription"
-                            class="form-control" rows="3" required="required"><%= report.description %></textarea>
+                            class="form-control" rows="3" required="required" placeholder="Nhập mô tả"><%= report.description %></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="input_name" style="margin-top: 10px;"  class="col-sm-2">
+                            <h5>Chia sẻ với</h5>
+                        </label>
+                        <input type="text" name="share" style="margin-top: 10px;" value="<%= report.share %>" id="input_share"
+                            class="form-control"  placeholder = "User name cách nhau bởi dấu phẩy">
                     </div>
 
                 </div>

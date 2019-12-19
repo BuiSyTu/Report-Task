@@ -15,7 +15,7 @@ const generateLog = (req, _status) => {
       id: uuid(),
       actionUserId: req.session.infoUser.user._id,
       type: convertMethod(req.method),
-      reportId: "req.body.id",
+      reportId: uuid().toString(),
       status: convertStatus(_status),
       createdTime: createdTime.toISOString(),
       service: "Report_task_service"
