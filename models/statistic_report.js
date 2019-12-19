@@ -14,12 +14,26 @@ const getReports = (userName) => {
         if (err) {
             defer.reject(err)
         } else {
-            defer.resolve(res)
+            defer.resolve(res.rows)
+        }
+    })
+    return defer.promise
+}
+
+const getReportsByCreatorId = creator_id => {
+    let defer = q.defer()
+    let sql = `SELECT * FROM report.report WHERE creator_id = '${creator_id}'`
+    client.query(sql, (err, res) => {
+        if (err) {
+            defer.reject(err)
+        } else {
+            defer.resolve(res.rows)
         }
     })
     return defer.promise
 }
 
 module.exports = {
-    getReports
+    getReports,
+    getReportsByCreatorId
 }
