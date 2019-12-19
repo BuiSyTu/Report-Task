@@ -3,6 +3,7 @@ const express = require('express')
 
 const checkRole = require('../helper/checkRole')
 const env = require('../helper/environment')
+const statistic_md = require('../models/statistic_report')
 
 const router = express.Router()
 
@@ -26,8 +27,8 @@ router.get('/:id', [checkRole.hasUserId], async (req, res) => {
     report.department = "Không xác định"
   }
   console.log(report);
-  
- report = {
+
+  report = {
     _id: report._id,
     name: report.name,
     description: report.description,
@@ -47,12 +48,22 @@ router.get('/:id', [checkRole.hasUserId], async (req, res) => {
     percentComplete: report.percentComplete,
     type: report.type,
     status: report.status,
-    createdAt:report.createdAt,
+    createdAt: report.createdAt,
     updatedAt: report.updatedAt
   }
   // console.log(report);
   // res.json(report);
-  res.render('task/detailTask', {report});
+  res.render('task/detailTask', { report });
 });
+
+router.get("/share/:name", (req, res, next) => {
+  let userName = req.params.name
+  statistic_md.getReports(userName)
+    .then(result => {
+      res.json(result.rows)
+    }).catch(err => {
+      res.json({ status_code: 500 })
+    })
+})
 
 module.exports = router;
