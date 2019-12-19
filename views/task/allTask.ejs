@@ -40,12 +40,15 @@
                     <tr style="text-align: center;">
                         <td><%= i+1 %></td>
                         <td><%= report[i].name%></td>
-                        <td><%= report[i].percentComplete%></td>
+                        <td>
+                            <div style="display: flex; "><%= report[i].percentComplete%> <span
+                                    style="margin-left: 5px;">%</span></div>
+                        </td>
                         <td><%= report[i].description%></td>
                         <td><%= report[i].status %></td>
                         <td>
                             <button style="border: none;" type="button" class="btn btn-outline-info">
-                                <a href="/reports/<%= report[i].id %>">
+                                <a href="/reports/<%= report[i]._id %>">
                                     <i class="fa fa-info-circle" aria-hidden="true"></i> Xem chi tiết
                                 </a>
                             </button>

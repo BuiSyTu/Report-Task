@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Chi tiết báo cáo</title>
+    <title>Chi tiết task</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css"
@@ -19,32 +19,39 @@
     <div class="wrapper">
         <% include ../components/sidebar1_custom %>
         <div class="container">
-            <h3 style="text-align: center; margin: 15px;"><%= report.name %></h3>
+            <h3 style="text-align: center; margin: 15px;">Chi tiết task: <%= report.name %></h3>
 
             <div class="table-responsive text-center">
                 <table class="table table-hover table-bordered table-striped table-condensed">
                     <tbody>
                         <tr>
                             <th>Id</th>
-                            <td><%= report.id%></td>
+                            <td><%= report._id%></td>
                         </tr>
                         <tr>
                             <th>Tên báo cáo</th>
                             <td><%= report.name%></td>
                         </tr>
                         <tr>
-                            <th>Người thực hiện</th>
-                            <td><%= report.creator_name%></td>
+                            <th>Mô tả</th>
+                            <td><%= report.description%></td>
                         </tr>
                         <tr>
-                            <th>Thời gian</th>
-                            <td><%= report.start_time %><i class="fa fa-arrow-right"
-                                    style="margin-right: 5px; margin-left: 5px"
-                                    aria-hidden="true"></i><%= report.end_time %></td>
+                            <th>Thông tin người thực hiện</th>
+                            <td>
+                                <ul class="li">Id: <%= report.doer.id %></ul>
+                                <ul class="li">Họ tên: <%= report.doer.name %></ul>
+                                <ul class="li">Email: <%= report.doer.email %></ul>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Task hoàn thành</th>
-                            <td><%= report.finished_task%></td>
+                            <th>Người cùng thực hiện</th>
+                            <% if(report.coDoers.length == 0) {%>
+                                Không có
+                                <% } else {%>
+                                    <td><%= report.finished_task%></td>
+                                    <% } %>
+                           
                         </tr>
                         <tr>
                             <th>Task đang làm</th>
