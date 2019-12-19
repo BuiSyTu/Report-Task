@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Danh sách báo cáo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css"
+        integrity="sha256-Md8eaeo67OiouuXAi8t/Xpd8t2+IaJezATVTWbZqSOw=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"> -->
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <% include ./components/sidebar1_custom %>
+        <div class="container">
+            <h2 style="text-align: center; margin-top: 20px;">Danh sách Log</h2>
+            <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
+            <br>
+
+            <table class="table">
+                <thead>
+                    <tr style="text-align: center;">
+                        <th>STT</th>
+                        <th>Log ID</th>
+                        <th>User ID</th>
+                        <th>Type</th>
+                        <th>Report ID</th>
+                        <th>Status</th>
+                        <th>Created Time</th>
+                        <th>Service</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(logs.length != 0) {%>
+                    <% for(let i = 0; i < logs.length; i++){%>
+                    <tr style="text-align: center;">
+                        <td><%= i+1 %></td>
+                        <td><%= logs[i].id%></td>
+                        <td><%= logs[i].actionUserId%></td>
+                         <td><%= logs[i].type%></td>
+                        <td><%= logs[i].reportId%></td>
+                        <td><%= logs[i].status%></td>
+                        <td><%= logs[i].createdTime.toISOString() %></td>
+                        <td><%= logs[i].service%></td>
+                    </tr>
+                    <% }%>
+
+                    <%} else {%>
+                    <tr style="text-align: center;">
+                        <td colspan="5">
+                            <p style="color: gray;">Hiện tại không có Log</p>
+                        </td>
+                    </tr>
+                    <%}%>
+            </tbody>
+            </table>
+            <hr>
+          </div>
+    </div>
+  
+  <script src="/static/js/post.js"></script>
+
+</body>
+
+</html>
