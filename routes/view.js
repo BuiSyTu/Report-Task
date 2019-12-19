@@ -84,53 +84,6 @@ router.get('/department/:id', async (req, res) => {
 });
 
 
-router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
-    let idReport = await apiNhomHuy.getIdToCreateReport();
-    let urlCreateReport = req.protocol + '://' + req.get('host') + '/create_report/'
-
-    for (let i = 0; i < 10; i++) {
-        let id = idReport[i];
-        let response = await axios.get(`${env.baseUrl_nhom3}/api/recurrent-tasks/${id}`);
-        response = response.data;
-        if (!response.doer) {
-            response.doer = "Không xác định"
-        }
-        let report = {
-            task_id: response._id,
-            name: response.name || "Không xác định",
-            doer: response.doer.name || "Không xác định",
-            coDoers: response.coDoers.length == 0 ? "Không xác định" : response.coDoers.map(item => item.name),
-            reviewer: response.reviewer.name || "Không xác định",
-            creator: response.creator.name || "Không xác định",
-            co_department: response.coDepartments.length == 0 ? "Không xác định" : response.coDepartments.map(item => item.name),
-            start: response.start,
-            finish: response.finish || "Không xác định",
-            status: response.status,
-            type: response.type
-        }
-
-        // post form
-        try {
-            await axios({
-                method: 'POST',
-                url: urlCreateReport + id,
-                data: report,
-                headers: env.headers
-            });
-        } catch (error) {
-            return res.json({
-                statusCode: 500
-            });
-        }
-    };
-
-    return res.json({
-        statusCode: 200,
-        idReport: idReport
-    });
-})
-
-
 router.get('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     res.render('statisticReport', { start: null, end: null, report: false })
 })
@@ -166,6 +119,8 @@ router.get('/all-statistic-report', [checkRole.hasUserId], (req, res) => {
             return res.json({ status_code: 500 })
         })
 })
+
+
 router.get('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => {
     let { id } = req.params;
     reportTask.getStatisticReportByTypeId(id, 'id')
@@ -177,6 +132,8 @@ router.get('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => {
             res.json({ "status_code": 500 })
         })
 })
+
+
 router.delete('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => {
     let { id } = req.params;
     reportTask.deleteStatisticReportTask(id)
@@ -190,6 +147,9 @@ router.delete('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => 
             res.json({ "status_code": 500 })
         })
 })
+
+
+
 
 
 module.exports = router;

@@ -1,22 +1,15 @@
 require("body-parser")
 
-const axios = require('axios');
 const express = require('express')
-const moment = require('moment')
+const router = express.Router()
 const uuid = require('uuid/v1');
+const axios = require('axios');
+const moment = require('moment')
 
+const reportTask = require('../models/report_task')
+const { generateLog } = require('../helper/generate_log')
 const checkRole = require('../helper/checkRole');
 const env = require('../helper/environment')
-const { generateLog } = require('../helper/generate_log')
-const reportTask = require('../models/report_task')
-
-const router = express.Router()
-
-router.get('/test1', (req, res, next) => {
-  arr = [1, 2, 3]
-  arr.toString();
-  res.json(JSON.parse('[' + arr.toString() + ']'))
-})
 
 
 router.get('/create_report/:id', (req, res, next) => {
@@ -81,6 +74,27 @@ router.post('/create_report/:id/', (req, res, next) => {
     })
 })
 
+
+router.get('/logs', (req, res, next) => {
+  reportTask.getLogService(req.query)
+    .then(result => {
+      let rs2 = result.map(item => {
+        return {
+          id: item.id,
+          actionUserId: item.actionuserid,
+          type: item.type,
+          reportId: item.reportid,
+          status: item.status,
+          createdTime: item.createdtime,
+          service: item.service
+        }
+      })
+      res.json(rs2);
+
+    }).catch(err => {
+      res.json({ "status_code": "500" })
+    })
+})
 
 // get all reports
 router.get('/', [checkRole.hasUserId], function (req, res, next) {
@@ -187,6 +201,7 @@ router.get('/projects/:id', (req, res, next) => {
       res.json("status_code: 500")
     })
 })
+
 
 
 // get report by deparment id
