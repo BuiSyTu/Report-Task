@@ -46,32 +46,57 @@
                         </tr>
                         <tr>
                             <th>Người cùng thực hiện</th>
-                            <% if(report.coDoers.length == 0) {%>
-                                Không có
-                                <% } else {%>
-                                    <td><%= report.finished_task%></td>
-                                    <% } %>
-                           
+                            <td>
+                                <%= JSON.stringify(report.coDoers) %>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Task đang làm</th>
-                            <td><%= report.doing_task%></td>
+                            <th>Người đánh giá</th>
+                            <td>
+                                <%= JSON.stringify(report.reviewer) %>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Task hủy bỏ</th>
-                            <td><%= report.cancel_task%></td>
+                            <th>Người tạo</th>
+                            <td>
+                                <%= JSON.stringify(report.creator) %>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Task quá hạn</th>
-                            <td><%= report.overdue_task%></td>
+                            <th>Phòng ban</th>
+                            <td><%= JSON.stringify(report.department)%></td>
+                        </tr>
+                        <tr>
+                            <th>Phòng ban liên quan</th>
+                            <td><%= JSON.stringify(report.coDepartments)%></td>
+                        </tr>
+                        <tr>
+                            <th>Bắt đầu</th>
+                            <td><%= report.start%></td>
+                        </tr>
+                        <tr>
+                            <th>Hạn chót</th>
+                            <td><%= report.due%></td>
+                        </tr>
+                        <tr>
+                            <th>Comment</th>
+                            <td><%= report.comment%></td>
+                        </tr>
+                        <tr>
+                            <th>Tiến độ</th>
+                            <td><%= report.percentComplete %> <span style="margin-left: 5px;">%</span></td>
+                        </tr>
+                        <tr>
+                            <th>Loại công việc</th>
+                            <td><%= report.type%></td>
                         </tr>
                         <tr>
                             <th>Thời gian tạo</th>
-                            <td><%= report.created_time.toISOString()%></td>
+                            <td><%= report.createdAt%></td>
                         </tr>
                         <tr>
-                            <th>Mô tả</th>
-                            <td><%= report.description%></td>
+                            <th>Thời gian cập nhật</th>
+                            <td><%= report.updatedAt%></td>
                         </tr>
                     </tbody>
                 </table>
