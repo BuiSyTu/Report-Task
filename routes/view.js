@@ -150,6 +150,9 @@ router.delete('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => 
         })
 })
 
+router.get('/aboutUs', [checkRole.hasUserId], (req,res)=>{
+    res.render('aboutUs');
+})
 
 
 

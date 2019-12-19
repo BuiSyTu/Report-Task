@@ -43,7 +43,7 @@
                         <td><%= i+1 %></td>
                         <td><%= logs[i].id%></td>
                         <td><%= logs[i].actionUserId%></td>
-                         <td><%= logs[i].type%></td>
+                        <td><%= logs[i].type%></td>
                         <td><%= logs[i].reportId%></td>
                         <td><%= logs[i].status%></td>
                         <td><%= logs[i].createdTime.toISOString() %></td>
@@ -53,7 +53,7 @@
 
                     <%} else {%>
                     <tr style="text-align: center;">
-                        <td colspan="5">
+                        <td colspan="8">
                             <p style="color: gray;">Hiện tại không có Log</p>
                         </td>
                     </tr>

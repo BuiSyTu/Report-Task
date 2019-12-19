@@ -30,18 +30,24 @@ router.get('/', (req, res, next) => {
 router.get('/all', [checkRole.hasUserId], (req, res) => {
   log_md.getLogService(req.query)
     .then(rows => {
-      let logs = rows.map(item => {
-        return {
-          id: item.id,
-          actionUserId: item.actionuserid,
-          type: item.type,
-          reportId: item.reportid,
-          status: item.status,
-          createdTime: item.createdtime,
-          service: item.service
-        }
-      })
-      res.render('log.ejs', { logs })
+      console.log('rows: ', rows);
+      if(rows.message){
+        res.render('log.ejs', {logs: []})
+      } else {
+        let logs = rows.map(item => {
+          return {
+            id: item.id,
+            actionUserId: item.actionuserid,
+            type: item.type,
+            reportId: item.reportid,
+            status: item.status,
+            createdTime: item.createdtime,
+            service: item.service
+          }
+        })
+        res.render('log.ejs', { logs })
+      }
+     
     }).catch(err => {
       res.json({ "status_code": "500" })
     })
