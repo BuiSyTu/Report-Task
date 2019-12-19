@@ -36,7 +36,7 @@
             <div class="tab-content">
               <div id="mine" class="container tab-pane active"><br>
                 <div class="container">
-                    <h3 style="text-align: center; margin-top: 20px;">Danh sách báo cáo của <%= report[0].creator_name %></h3>
+                    <h3 style="text-align: center; margin-top: 20px;">Danh sách báo cáo của <%= user.user.name %></h3>
                     <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
                     <br>
         
@@ -89,7 +89,7 @@
               </div>
               <div id="share" class="container tab-pane fade"><br>
                 <div class="container">
-                    <h3 style="text-align: center; margin-top: 20px;">Danh sách báo cáo được chia sẻ với <%= report[0].creator_name%></h3>
+                    <h3 style="text-align: center; margin-top: 20px;">Danh sách báo cáo được chia sẻ với <%= user.user.name%></h3>
                     <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
                     <br>
         

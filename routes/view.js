@@ -95,6 +95,8 @@ router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
 
     let report = await generateReport(start, end, req);
     report = report[0];
+    console.log(report);
+    
     reportTask.addReportStatisticTask(report)
         .then(result => {
             generateLog(req, 200)
@@ -118,7 +120,7 @@ router.get('/all-statistic-report', [checkRole.hasUserId], (req, res) => {
         .then(report => {
             statistic_report.getReports(req.session.infoUser.user.username)
                 .then(reportShare => {
-                    res.render('statistic/allStatisticReport', { report, reportShare });
+                    res.render('statistic/allStatisticReport', { user: req.session.infoUser, report, reportShare });
                 })
         })
         .catch(err => {
