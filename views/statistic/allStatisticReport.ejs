@@ -18,57 +18,134 @@
 
     <div class="wrapper">
         <% include ../components/sidebar1_custom %>
-        <div class="container">
-            <h2 style="text-align: center; margin-top: 20px;">Danh sách báo cáo</h2>
-            <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
+
+        <div class="container mt-3">
+            <h2 style="text-align: center;">Danh sách báo cáo được tổng hợp</h2>
             <br>
-
-            <table class="table">
-                <thead>
-                    <tr style="text-align: center;">
-                        <th>STT</th>
-                        <th>Tên báo cáo</th>
-                        <th>Người tạo</th>
-                        <th>Thời gian tạo</th>
-                        <th>Mô tả</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if(report.length != 0) {%>
-                    <% for(let i = 0; i < report.length; i++){%>
-                    <tr style="text-align: center;">
-                        <td><%= i+1 %></td>
-                        <td><%= report[i].name%></td>
-                        <td><%= report[i].creator_name%></td>
-                        <td><%= report[i].created_time.toISOString()%></td>
-                        <td><%= report[i].description %></td>
-                        <td>
-                            <button style="border: none;" type="button" class="btn btn-outline-info">
-                                <a href="/view/all-statistic-report/<%= report[i].id %>">
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i> Xem chi tiết
-                                </a>
-                            </button>
-                            <br>
-                            <button style="border: none;" class="btn btn-outline-danger delete_statistic_report"
-                                report_id="<%= report[i].id%>" report_name="<%= report[i].name %>">
-                                <i class="fa fa-trash-o" style="font-size: x-large;"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <% }%>
-
-                    <%} else {%>
-                    <tr style="text-align: center;">
-                        <td colspan="5">
-                            <p style="color: gray;">Hiện tại không có báo cáo</p>
-                        </td>
-                    </tr>
-                    <%}%>
-            </tbody>
-            </table>
-            <hr>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#mine">Báo cáo của tôi</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#share">Được chia sẻ</a>
+              </li>
+            </ul>
+          
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div id="mine" class="container tab-pane active"><br>
+                <div class="container">
+                    <h3 style="text-align: center; margin-top: 20px;">Danh sách báo cáo của <%= report[0].creator_name %></h3>
+                    <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
+                    <br>
+        
+                    <table class="table">
+                        <thead>
+                            <tr style="text-align: center;">
+                                <th>STT</th>
+                                <th>Tên báo cáo</th>
+                                <th>Người tạo</th>
+                                <th>Thời gian tạo</th>
+                                <th>Mô tả</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(report.length != 0) {%>
+                            <% for(let i = 0; i < report.length; i++){%>
+                            <tr style="text-align: center;">
+                                <td><%= i+1 %></td>
+                                <td><%= report[i].name%></td>
+                                <td><%= report[i].creator_name%></td>
+                                <td><%= report[i].created_time.toISOString()%></td>
+                                <td><%= report[i].description %></td>
+                                <td>
+                                    <button style="border: none;" type="button" class="btn btn-outline-info">
+                                        <a href="/view/all-statistic-report/<%= report[i].id %>">
+                                            <i class="fa fa-info-circle" aria-hidden="true"></i> Xem chi tiết
+                                        </a>
+                                    </button>
+                                    <br>
+                                    <button style="border: none;" class="btn btn-outline-danger delete_statistic_report"
+                                        report_id="<%= report[i].id%>" report_name="<%= report[i].name %>">
+                                        <i class="fa fa-trash-o" style="font-size: x-large;"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }%>
+        
+                            <%} else {%>
+                            <tr style="text-align: center;">
+                                <td colspan="6">
+                                    <p style="color: gray;">Hiện tại không có báo cáo</p>
+                                </td>
+                            </tr>
+                            <%}%>
+                    </tbody>
+                    </table>
+                    <hr>
+                  </div>
+              </div>
+              <div id="share" class="container tab-pane fade"><br>
+                <div class="container">
+                    <h3 style="text-align: center; margin-top: 20px;">Danh sách báo cáo được chia sẻ với <%= report[0].creator_name%></h3>
+                    <!-- <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>             -->
+                    <br>
+        
+                    <table class="table">
+                        <thead>
+                            <tr style="text-align: center;">
+                                <th>STT</th>
+                                <th>Tên báo cáo</th>
+                                <th>Người tạo</th>
+                                <th>Thời gian tạo</th>
+                                <th>Mô tả</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(reportShare.length != 0) {%>
+                            <% for(let i = 0; i < reportShare.length; i++){%>
+                            <tr style="text-align: center;">
+                                <td><%= i+1 %></td>
+                                <td><%= reportShare[i].name%></td>
+                                <td><%= reportShare[i].creator_name%></td>
+                                <td><%= reportShare[i].created_time.toISOString()%></td>
+                                <td><%= reportShare[i].description %></td>
+                                <td>
+                                    <button style="border: none;" type="button" class="btn btn-outline-info">
+                                        <a href="/view/all-statistic-report/<%= reportShare[i].id %>">
+                                            <i class="fa fa-info-circle" aria-hidden="true"></i> Xem chi tiết
+                                        </a>
+                                    </button>
+                                    <br>
+                                    <button style="border: none;" class="btn btn-outline-danger delete_statistic_reportShare"
+                                        reportShare_id="<%= reportShare[i].id%>" reportShare_name="<%= reportShare[i].name %>">
+                                        <i class="fa fa-trash-o" style="font-size: x-large;"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }%>
+        
+                            <%} else {%>
+                            <tr style="text-align: center;">
+                                <td colspan="6">
+                                    <p style="color: gray;">Hiện tại không có báo cáo được chia sẻ với bạn</p>
+                                </td>
+                            </tr>
+                            <%}%>
+                    </tbody>
+                    </table>
+                    <hr>
+                  </div>
+              </div>
+             
+            </div>
           </div>
+
+
+       
     </div>
   
   <script src="/static/js/post.js"></script>

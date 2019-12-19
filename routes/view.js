@@ -10,6 +10,7 @@ const env = require('../helper/environment');
 const { generateLog } = require('../helper/generate_log')
 const { generateReport } = require('../helper/generate_report');
 const reportTask = require('../models/report_task')
+const statistic_report = require('../models/statistic_report')
 
 const router = express.Router()
 
@@ -95,7 +96,7 @@ router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     let report = await generateReport(start, end, req);
     report = report[0];
     reportTask.addReportStatisticTask(report)
-        .then( result => {
+        .then(result => {
             generateLog(req, 200)
             res.render('statisticReport', { start, end, report })
         }).catch(err => {
@@ -113,11 +114,14 @@ router.get('/logout', (req, res, next) => {
 
 
 router.get('/all-statistic-report', [checkRole.hasUserId], (req, res) => {
-    reportTask.getAllStatisticReportTask()
+    statistic_report.getReportsByCreatorId(req.session.infoUser.user.userId)
         .then(report => {
-            // console.log(report);
-            res.render('statistic/allStatisticReport', { report });
-        }).catch(err => {
+            statistic_report.getReports(req.session.infoUser.user.username)
+                .then(reportShare => {
+                    res.render('statistic/allStatisticReport', { report, reportShare });
+                })
+        })
+        .catch(err => {
             return res.json({ status_code: 500 })
         })
 })
@@ -150,7 +154,7 @@ router.delete('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => 
         })
 })
 
-router.get('/aboutUs', [checkRole.hasUserId], (req,res)=>{
+router.get('/aboutUs', [checkRole.hasUserId], (req, res) => {
     res.render('aboutUs');
 })
 

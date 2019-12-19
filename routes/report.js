@@ -60,7 +60,7 @@ router.get("/share/:name", (req, res, next) => {
   let userName = req.params.name
   statistic_md.getReports(userName)
     .then(result => {
-      res.json(result.rows)
+      res.json(result)
     }).catch(err => {
       res.json({ status_code: 500 })
     })
