@@ -1,16 +1,17 @@
-const express = require('express')
-const router = express.Router()
-const reportTask = require('../models/report_task')
 require("body-parser")
-const moment = require('moment')
-const { generateLog } = require('../helper/generate_log')
-const uuid = require('uuid/v1');
+
 const axios = require('axios');
-const env = require('../helper/environment');
-const checkRole = require('../helper/checkRole');
-const { generateReport } = require('../helper/generate_report');
-const departmentApi = require('../otherApi/departmentApi');
+const express = require('express')
+
 const apiNhomHuy = require('../otherApi/apiNhomHuy');
+const checkRole = require('../helper/checkRole');
+const departmentApi = require('../otherApi/departmentApi');
+const env = require('../helper/environment');
+const { generateReport } = require('../helper/generate_report');
+const reportTask = require('../models/report_task')
+
+const router = express.Router()
+
 
 router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
     let { id } = req.params;
@@ -27,6 +28,7 @@ router.get('/report/:id', [checkRole.hasUserId], (req, res, next) => {
 router.get('/login', (req, res, next) => {
     res.render("login", { message: req.session.validUrl, error: false });
 })
+
 
 router.post('/login/', [], (req, res) => {
     let { username, password } = req.body;
@@ -46,7 +48,8 @@ router.post('/login/', [], (req, res) => {
         };
 
         if (result.data.token) {
-            res.redirect(req.session.validUrl || '/');
+            res.redirect(req.session.validUrl || '/view/all-statistic-report');
+            // res.redirect('/reports/all');
         }
         else {
             res.render("login", {
@@ -62,10 +65,8 @@ router.post('/login/', [], (req, res) => {
 router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     axios.get(env.baseUrl + '/admin/report-list').then(async result => {
         await Promise.all(result.data.map(async item => {
-
             let departInfo = await departmentApi.getDepartmentById(item.department_id);
             item.department_name = departInfo.depart_name;
-
             return item;
         })).then(result => {
             res.render("reportList", { report: result });
@@ -74,11 +75,11 @@ router.get('/report-list', [checkRole.hasUserId], (req, res, next) => {
     });
 });
 
+
 router.get('/department/:id', async (req, res) => {
     // id = '5deb052c0351e97280dd297f';
     let { id } = req.params;
     let test = await departmentApi.getDepartmentById(id);
-
     res.json(test);
 });
 
@@ -107,7 +108,6 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
             status: response.status,
             type: response.type
         }
-        // 
 
         // post form
         try {
@@ -117,8 +117,6 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
                 data: report,
                 headers: env.headers
             });
-
-
         } catch (error) {
             return res.json({
                 statusCode: 500
@@ -134,14 +132,64 @@ router.get('/fake_report', [checkRole.hasUserId], async (req, res) => {
 
 
 router.get('/statistic_report', [checkRole.hasUserId], async (req, res) => {
-    res.render('statisticReport', { report: false })
+    res.render('statisticReport', { start: null, end: null, report: false })
 })
 
 
 router.post('/statistic_report', [checkRole.hasUserId], async (req, res) => {
     let { start, end } = req.body;
+
     let report = await generateReport(start, end, req);
-    res.json({ start, end, report })
+    report = report[0];
+    reportTask.addReportStatisticTask(report)
+        .then(result => {
+            res.render('statisticReport', { start, end, report })
+        }).catch(err => {
+            return res.json({ status_code: 500 })
+        })
+
 })
+
+
+router.get('/logout', (req, res, next) => {
+    req.session.destroy();
+    res.redirect('login')
+})
+
+
+router.get('/all-statistic-report', [checkRole.hasUserId], (req, res) => {
+    reportTask.getAllStatisticReportTask()
+        .then(report => {
+            // console.log(report);
+            res.render('statistic/allStatisticReport', { report });
+        }).catch(err => {
+            return res.json({ status_code: 500 })
+        })
+})
+router.get('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => {
+    let { id } = req.params;
+    reportTask.getStatisticReportByTypeId(id, 'id')
+        .then(report => {
+            console.log('report: ', report);
+            
+            res.render('statistic/detailStatisticReport', { report })
+        }).catch(() => {
+            res.json({ "status_code": 500 })
+        })
+})
+router.delete('/all-statistic-report/:id', [checkRole.hasUserId], (req, res) => {
+    let { id } = req.params;
+    reportTask.deleteStatisticReportTask(id)
+        .then(result => {
+            status = 200
+            generateLog(req, status)
+            res.json({ "status_code": 200 })
+        }).catch(() => {
+            status = 500
+            generateLog(req, status)
+            res.json({ "status_code": 500 })
+        })
+})
+
 
 module.exports = router;

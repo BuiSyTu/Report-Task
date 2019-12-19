@@ -1,12 +1,14 @@
-const express = require('express')
-const router = express.Router()
-const reportTask = require('../models/report_task');
 require("body-parser");
-const moment = require('moment');
-const uuid = require('uuid/v1');
+
 const axios = require('axios');
+const express = require('express')
+
 const checkRole = require('../helper/checkRole')
 const env = require('../helper/environment')
+const reportTask = require('../models/report_task');
+
+const router = express.Router()
+
 
 router.get('/report-list', (req, res, next) => {
   reportTask.getAllReportTask()
@@ -36,16 +38,6 @@ router.get('/report/:id', (req, res, next) => {
 router.get('/info', [checkRole.hasUserId], (req, res) => {
   res.json(req.session.infoUser);
 });
-
-
-router.get('/hasDoer', [checkRole.hasUserId], async (req, res) => {
-  let result = await axios.get(`${env.baseUrl_nhom3}/api/recurrent-tasks/`);
-
-  let hasDoer = result.data.filter(item => item.hasOwnProperty('doer') && item.doer.id == req.session.infoUser.user.userId);
-
-  res.json( hasDoer );
-});
-
 
 
 module.exports = router;
